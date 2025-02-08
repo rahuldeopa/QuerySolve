@@ -14,7 +14,7 @@ function Heading() {
     <>
       
         <center>
-        <div2 style={tdoubt}>DoubtOut</div2>
+        <div2 style={tdoubt}>QuerySolve</div2>
        <br></br>
         <div2>
            <span>A Doubt Solving Platform</span>

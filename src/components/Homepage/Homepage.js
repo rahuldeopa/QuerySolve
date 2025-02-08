@@ -28,7 +28,7 @@ function Homepage() {
 
                         <div className="col-lg-6 col-md-12 col-xs-12 mx-4">
                             <div className="contents">
-                                <h2 className="head-title">DoubtOut <br /><small>-A Doubt Solving Platform</small></h2>
+                                <h2 className="head-title">QuerySolve <br /><small>-A Doubt Solving Platform</small></h2>
                                 <p>Find the best answer to your technical question, help others answer theirs. DoubtOut is a community-based space to find and contribute answers to technical challenges.</p>
                             </div>
                             <div className="text-left">
@@ -50,7 +50,7 @@ function Homepage() {
             <footer className="text-center text-lg-start" Style="background-color: #4e63d7; position:absolute; bottom:0vh;width:100%;">
 
                 <div className="text-center text-white p-3" Style="background-color: rgba(0, 0, 0, 0.2);">
-                    © 2023 Made With ❤ DoubtOut
+                    © 2025 Made With ❤ QuerySolve
 
                 </div>
 
