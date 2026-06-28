@@ -37,7 +37,7 @@ export default function Adminquestion() {
      const paginate = pageNum => setcurrentPage(pageNum);
     
     const fetchAllFilteredQuestions = async () => {
-        const response = await fetch(`http://localhost:5000/api/question/fetchUserFilteredQuestions`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchUserFilteredQuestions`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export default function Adminquestion() {
         setFilteredQue(data);
     };
     useEffect(() => {
-        fetch(`http://localhost:5000/api/question/usedtags`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/usedtags`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ export default function Adminquestion() {
     }, [filters])
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/question/fetchquestions`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchquestions`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export default function Adminquestion() {
 
       // This function will find the count of No. of answer for a perticular Question
       const FindFrequencyOfAns = async () => {
-        const response = await fetch("http://localhost:5000/api/answer/findNumberOfAns", {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/answer/findNumberOfAns", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export default function Adminquestion() {
     }
 
     const fetchAllQuestions = async () => {
-        await fetch("http://localhost:5000/api/question/fetchquestions", {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/fetchquestions", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -109,7 +109,7 @@ export default function Adminquestion() {
     
     const fetchVotes = async()=>{
 
-        const response = await fetch(`http://localhost:5000/api/question/fetchallVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchallVotes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export default function Adminquestion() {
     }
 
     const deleteQuestion = async (id) => {
-        const response = await fetch(`http://localhost:5000/api/question/deleteque/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/deleteque/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

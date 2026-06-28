@@ -15,7 +15,7 @@ export default function UpdateAnswer() {
   const [state, setState] = useState(false);
 
   const fetchAnswer = async (id) => {
-    const response = await fetch(`http://localhost:5000/api/answer/userAnstoUpdate/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/userAnstoUpdate/${id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ export default function UpdateAnswer() {
   const updateAns = async (e, id) => {
     e.preventDefault();
 
-    let response = await fetch(`http://localhost:5000/api/answer/updateans/${id}`, {
+    let response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/updateans/${id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

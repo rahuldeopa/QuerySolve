@@ -26,7 +26,7 @@ export default function Content(props) {
     }
 
     const fetchQuestion = async (id) => {
-        await fetch(`http://localhost:5000/api/question/fetchQueById/${id}`, {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchQueById/${id}`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         }).then(response => response.json()).then((data) => {
@@ -36,7 +36,7 @@ export default function Content(props) {
     }
 
     const fetchAnswers = async (id) => {
-        await fetch(`http://localhost:5000/api/answer/fetchanswer/${id}`, {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchanswer/${id}`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         }).then(response => response.json()).then((data) => {
@@ -47,7 +47,7 @@ export default function Content(props) {
     const upvote = async (e, id) => {
         if (localStorage.getItem("username") !== null) {
             e.preventDefault();
-            const response = await fetch(`http://localhost:5000/api/answer/upvote/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/upvote/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -61,7 +61,7 @@ export default function Content(props) {
     const downvote = async (e, id) => {
         if (localStorage.getItem("username") !== null) {
             e.preventDefault();
-            const response = await fetch(`http://localhost:5000/api/answer/downvote/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/downvote/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -73,7 +73,7 @@ export default function Content(props) {
     }
 
     const fetchVotes = async () => {
-        const response = await fetch(`http://localhost:5000/api/answer/fetchVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchVotes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -82,7 +82,7 @@ export default function Content(props) {
     }
 
     const acceptAnswer = async (e, id) => {
-        const response = await fetch(`http://localhost:5000/api/answer/acceptanswer/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/acceptanswer/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': "application/json" }
         });

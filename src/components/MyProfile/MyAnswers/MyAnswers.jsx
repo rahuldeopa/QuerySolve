@@ -16,7 +16,7 @@ export default function MyAnswers() {
     }
 
     const fetchAllFilteredAnswers = async () => {
-        const response = await fetch(`http://localhost:5000/api/answer/fetchUserFilteredAnswers/${localStorage.getItem("username")}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchUserFilteredAnswers/${localStorage.getItem("username")}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export default function MyAnswers() {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/answer/givenAnswersTags/${localStorage.getItem("username")}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/givenAnswersTags/${localStorage.getItem("username")}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export default function MyAnswers() {
     }, [filters]);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/answer/fetchUserAnswers/${localStorage.getItem("username")}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchUserAnswers/${localStorage.getItem("username")}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

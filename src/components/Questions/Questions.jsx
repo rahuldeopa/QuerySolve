@@ -19,7 +19,7 @@ export default function Questions() {
     const navigate = useNavigate();
 
     const fetchAllQuestions = async () => {
-        await fetch("http://localhost:5000/api/question/fetchquestions", {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/fetchquestions", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ export default function Questions() {
     }
 
     const sortByVotes = async () => {
-        await fetch("http://localhost:5000/api/question/fetchQueByHigherVotes", {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/fetchQueByHigherVotes", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export default function Questions() {
     }
 
     const answeredQuestions = async () => {
-        await fetch("http://localhost:5000/api/question/answeredQue", {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/answeredQue", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ export default function Questions() {
     }
 
     const unansweredQuestions = async () => {
-        await fetch("http://localhost:5000/api/question/unansweredQue", {
+        await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/unansweredQue", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

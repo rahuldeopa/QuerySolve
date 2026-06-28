@@ -20,7 +20,7 @@ export default function UserProfileAnalysis() {
     const [queLen, setQueLen] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/question/fetchUserQuestions/${username}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchUserQuestions/${username}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -91,7 +91,7 @@ export default function UserProfileAnalysis() {
     const [actAnsLen, setactAnsLen] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/answer/fetchUserAcceptedAnsweredQuestions/${username}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchUserAcceptedAnsweredQuestions/${username}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -162,7 +162,7 @@ export default function UserProfileAnalysis() {
     const [Anscount, setAnsCount] = useState([]);
     const [ansLen, setansLen] = useState(0);
     useEffect(() => {
-        fetch(`http://localhost:5000/api/answer/fetchUserAnsweredQuestions/${username}`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchUserAnsweredQuestions/${username}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

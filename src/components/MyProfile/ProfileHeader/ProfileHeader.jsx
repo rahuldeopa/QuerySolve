@@ -5,7 +5,7 @@ export default function ProfileHeader() {
     const [points, setPoints] = useState(0);
 
     const Points = async () => {
-        const response = await fetch("http://localhost:5000/api/answer/points", {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/answer/points", {
             method: "POST",
             headers: {
                 'Content-Type': "application/json"

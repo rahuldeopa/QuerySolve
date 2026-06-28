@@ -16,7 +16,7 @@ export default function AdminHome() {
     const [chartInstance, setChartInstance] = useState(null);
 
     const noOfusers =  async () => {
-        await fetch('http://localhost:5000/api/admin/noOfUsers', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/noOfUsers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function AdminHome() {
     const [Tags, setTags] = useState([]);
     const [count, setCount] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost:5000/api/question/fetchquestions`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchquestions`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

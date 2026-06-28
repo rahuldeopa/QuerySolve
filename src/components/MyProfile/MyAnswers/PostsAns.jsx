@@ -12,7 +12,7 @@ export default function Posts({ posts }) {
 
     const fetchVotes = async () => {
 
-        const response = await fetch(`http://localhost:5000/api/answer/fetchVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchVotes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export default function Posts({ posts }) {
 
     const deleteAns = async(id)=>{
         if (window.confirm("Are you sure you want to delete this response?")) {
-            const response = await fetch(`http://localhost:5000/api/answer/deleteans/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/deleteans/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

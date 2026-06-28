@@ -25,7 +25,7 @@ export default function AdminAnalysis() {
 
    
     useEffect(() => {
-        fetch(`http://localhost:5000/api/question/fetchquestions`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchquestions`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ export default function AdminAnalysis() {
     const navigate = useNavigate()
 
     const noOfQuestions = async () => {
-        await fetch('http://localhost:5000/api/admin/noOfQuestions', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/noOfQuestions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function AdminAnalysis() {
     }
 
     const noOfusers =  async () => {
-        await fetch('http://localhost:5000/api/admin/noOfUsers', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/noOfUsers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function AdminAnalysis() {
             )
         }
     const noOfAnswers = async () => {
-        await fetch('http://localhost:5000/api/admin/noOfAnswers', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/noOfAnswers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export default function AdminAnalysis() {
     }
 
     const noOfAccept = async () => {
-        await fetch('http://localhost:5000/api/admin/noOfAccept', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/noOfAccept', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export default function AdminAnalysis() {
     }
     
     const fetchQuestions = async () => {
-        await fetch('http://localhost:5000/api/admin/questions', {
+        await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/questions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ const [december, setDecember] = useState(0);
 useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:5000/api/admin/question-by-month');
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/question-by-month');
         const data = await response.json();
   
         data.forEach(item => {
@@ -225,7 +225,7 @@ useEffect(() => {
   useEffect(() => {
     async function fetchData() {
         try {
-            const response = await fetch('http://localhost:5000/api/admin/question-by-year');
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/question-by-year');
             const data = await response.json();
             data.forEach(item => {
                 const yearIndex = item.id - 2021;

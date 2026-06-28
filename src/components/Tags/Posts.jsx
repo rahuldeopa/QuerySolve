@@ -15,7 +15,7 @@ export default function Posts({ posts }) {
 
      // This function will find the count of No. of answer for a perticular Question
      const FindFrequencyOfAns = async () => {
-        const response = await fetch("http://localhost:5000/api/answer/findNumberOfAns", {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/answer/findNumberOfAns", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export default function Posts({ posts }) {
 
     const fetchVotes = async()=>{
 
-        const response = await fetch(`http://localhost:5000/api/question/fetchallVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchallVotes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

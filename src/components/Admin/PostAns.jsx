@@ -13,7 +13,7 @@ export default function Posts({ posts }) {
 
     const fetchVotes = async () => {
 
-        const response = await fetch(`http://localhost:5000/api/answer/fetchVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/answer/fetchVotes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export default function Posts({ posts }) {
     }
 
     const deleteAnswer = async (id) => {
-        const response = axios.delete(`http://localhost:5000/api/admin/deleteanswer/${id}`, {
+        const response = axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/admin/deleteanswer/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

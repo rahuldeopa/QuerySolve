@@ -32,7 +32,7 @@ export default function Editor(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('http://localhost:5000/api/question/addquestion', {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/question/addquestion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

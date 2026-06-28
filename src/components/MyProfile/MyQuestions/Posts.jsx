@@ -14,7 +14,7 @@ export default function Posts({ posts }) {
 
     const deleteQue = async (id) => {
         if (window.confirm("Are you sure you want to delete this question?")) {
-            const response = await fetch(`http://localhost:5000/api/question/deleteque/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/deleteque/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ export default function Posts({ posts }) {
     }
 
     const FindFrequencyOfAns = async () => {
-        const response = await fetch("http://localhost:5000/api/answer/findNumberOfAns", {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/answer/findNumberOfAns", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export default function Posts({ posts }) {
     }
 
     const fetchVotes = async () => {
-        const response = await fetch(`http://localhost:5000/api/question/fetchallVotes`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/fetchallVotes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
