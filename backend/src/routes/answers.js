@@ -3,7 +3,7 @@ const prisma = require('../prisma');
 const fetchuser = require('../middlewares/fetchuser');
 const router = express.Router();
 const LocalStorage = require('node-localStorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
+var localStorage = new LocalStorage(require('os').tmpdir() + '/scratch');
 
 router.post('/addanswer/:id', fetchuser, async (req, res) => {
     try {

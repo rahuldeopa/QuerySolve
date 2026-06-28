@@ -1,6 +1,6 @@
 const express = require('express');
 const LocalStorage = require('node-localStorage').LocalStorage;
-var localStorage = new LocalStorage('./scratch');
+var localStorage = new LocalStorage(require('os').tmpdir() + '/scratch');
 const prisma = require('../prisma');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
