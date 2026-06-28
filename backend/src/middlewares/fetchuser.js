@@ -1,4 +1,4 @@
-const LocalStorage = require('node-localStorage').LocalStorage;
+const LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage(require('os').tmpdir() + '/scratch');
 var jwt  = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'Darshitisagoodboy';

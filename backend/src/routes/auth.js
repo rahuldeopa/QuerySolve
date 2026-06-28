@@ -1,5 +1,5 @@
 const express = require('express');
-const LocalStorage = require('node-localStorage').LocalStorage;
+const LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage(require('os').tmpdir() + '/scratch');
 const prisma = require('../prisma');
 const { body, validationResult } = require('express-validator');
