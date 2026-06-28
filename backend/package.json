@@ -4,20 +4,21 @@
   "description": "DoubtOut - A Doubt Solving Plateform",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1" ,
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-validator": "^6.14.2",
     "jsonwebtoken": "^9.0.0",
-    "mongodb": "^2.2.16",
-    "mongoose": "^6.8.1",
     "node-localstorage": "^2.2.1",
+    "prisma": "^5.22.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {

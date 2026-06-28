@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  username  String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  questions Question[]
+  answers   Answer[]
+  comments  Comment[]
+  votes     Vote[]
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  username  String
+  email     String   @unique
+  password  String
+}
+
+model Tag {
+  id      String @id @default(uuid())
+  tagName String @unique
+  desc    String
+}
+
+model Question {
+  id        String    @id @default(uuid())
+  title     String
+  question  String
+  tags      String
+  postedBy  String
+  votes     Int       @default(0) // Aggregated Signal Score
+  createdAt DateTime  @default(now())
+  
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  
+  answers   Answer[]
+  comments  Comment[]
+  voteItems Vote[]
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  answer     String
+  postedBy   String
+  votes      Int      @default(0) // Aggregated Signal Score
+  status     String   @default("Not Accepted")
+  createdAt  DateTime @default(now())
+  
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  postedId   String
+  user       User     @relation(fields: [postedId], references: [id])
+
+  comments   Comment[]
+  voteItems  Vote[]
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  postedBy   String
+  comment    String
+  createdAt  DateTime @default(now())
+  
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  answerId   String?
+  answer     Answer?   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  
+  postedId   String
+  user       User      @relation(fields: [postedId], references: [id])
+}
+
+model Vote {
+  id         String   @id @default(uuid())
+  type       String   // "SIGNAL" or "NOISE"
+  
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  answerId   String?
+  answer     Answer?   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, questionId])
+  @@unique([userId, answerId])
+}

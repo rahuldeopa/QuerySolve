@@ -1,13 +1,210 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: #fdfdfd;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f4f4f5;
+    --color-surface-border: rgba(0, 0, 0, 0.05);
+    --color-text-main: #18181b;
+    --color-text-muted: #71717a;
+    --color-surface-glass: rgba(255, 255, 255, 0.75);
+  }
+
+  .dark {
+    --color-bg: #09090b;
+    --color-surface: #18181b;
+    --color-surface-hover: #27272a;
+    --color-surface-border: transparent;
+    --color-text-main: #f4f4f5;
+    --color-text-muted: #a1a1aa;
+    --color-surface-glass: rgba(24, 24, 27, 0.65);
+    
+  }
+
+  body {
+    @apply bg-background text-textMain font-sans antialiased m-0 p-0 transition-colors duration-300;
+  }
+
+  * {
+    outline: none !important;
+  }
+
+  *:focus,
+  *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #2563eb !important;
+    outline-offset: 2px;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer utilities {
+  .glass {
+    background-color: var(--color-surface-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    
+  }
+  
+  .dark .glass {
+    background-color: var(--color-surface-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: none !important;
+    box-shadow: none !important;
+    @apply shadow-glass-dark;
+  }
+
+  .border-theme {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .dark .border-theme {
+    border: none !important;
+  }
+
+  .premium-card {
+    @apply bg-surface border border-surfaceBorder rounded-2xl shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  /* Hide scrollbar for clean look */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Rich Text HTML Rendering Fixes */
+  .prose img {
+    @apply max-w-full h-auto rounded-xl my-4 mx-auto block shadow-md;
+  }
+  
+  .prose ul, .prose ol {
+    @apply pl-6 my-4;
+  }
+  
+  .prose ul {
+    @apply list-disc;
+  }
+  
+  .prose ol {
+    @apply list-decimal;
+  }
+  
+  .prose a {
+    @apply text-primary hover:underline font-medium;
+  }
+}
+
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Global Navigation and Link Style Overrides */
+a:hover {
+  text-decoration: none !important;
+}
+
+.prose a, .prose a:hover {
+  text-decoration: none;
+}
+
+/* Global Tag Pill Style Overrides (Borderless) */
+.bg-surfaceHover.border-surfaceBorder,
+.bg-surfaceHover.border,
+.bg-surfaceHover.border-surfaceBorder:hover,
+.bg-surfaceHover.border:hover {
+  border: none !important;
+  border-width: 0 !important;
+}
+
+/* Jodit Editor — follow app theme (light/dark) */
+.jodit-container,
+.jodit-container .jodit-workplace {
+  background-color: var(--color-surface) !important;
+  border-color: var(--color-surface-border) !important;
+}
+
+/* Kill Jodit default light borders in dark mode */
+.dark .jodit-container,
+.dark .jodit-toolbar__box,
+.dark .jodit-workplace,
+.dark .jodit-status-bar,
+.dark .jodit-toolbar-button,
+.dark .jodit-ui-group,
+.dark .jodit-toolbar-editor-collection {
+  border-color: transparent !important;
+}
+
+.dark .jodit-toolbar__box {
+  border-bottom: 1px solid var(--color-surface-hover) !important;
+}
+
+.jodit-toolbar__box {
+  background-color: var(--color-surface-hover) !important;
+  border-color: var(--color-surface-border) !important;
+}
+
+.jodit-workplace .jodit-wysiwyg,
+.jodit-wysiwyg {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-main) !important;
+}
+
+.jodit-wysiwyg a { color: #2563eb !important; }
+
+.jodit-status-bar {
+  background-color: var(--color-surface-hover) !important;
+  color: var(--color-text-muted) !important;
+  border-color: var(--color-surface-border) !important;
+}
+
+.jodit-toolbar-button__button {
+  color: var(--color-text-main) !important;
+}
+
+.jodit-toolbar-button__button:hover {
+  background-color: var(--color-surface) !important;
+}
+
+.jodit-toolbar-button__icon svg,
+.jodit-icon { fill: var(--color-text-main) !important; }
+
+.jodit-toolbar-button__trigger svg { fill: var(--color-text-muted) !important; }
+
+.jodit-add-new-line span,
+.jodit-placeholder { color: var(--color-text-muted) !important; }
+
+/* Jodit popups / dropdowns */
+.jodit-popup__content,
+.jodit-popup,
+.jodit-toolbar-editor-collection {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-main) !important;
+  border-color: var(--color-surface-border) !important;
 }
