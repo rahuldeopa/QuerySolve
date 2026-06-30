@@ -80,12 +80,12 @@ export default function Questions() {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto px-0 sm:px-6 lg:px-8 flex flex-col lg:flex-row w-full">
+            <div className="max-w-[1600px] mx-auto px-0 sm:px-6 lg:px-8 flex flex-col md:flex-row w-full">
                 {/* Left Sidebar */}
                 <Sidebar />
 
                 {/* Middle Feed */}
-                <main className="flex-1 py-8 px-4 md:px-8 w-full lg:border-r border-surfaceBorder overflow-hidden">
+                <main className="flex-1 py-8 px-4 md:px-8 w-full md:border-r border-surfaceBorder overflow-hidden">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                         <div className="flex flex-col gap-1">
                             <h1 className="text-3xl font-extrabold text-textMain tracking-tight">Public Feed</h1>
@@ -150,7 +150,7 @@ export default function Questions() {
                 </main>
 
                 {/* Right Sidebar */}
-                <aside className="hidden xl:block w-80 flex-shrink-0 py-8 px-6">
+                <aside className="hidden lg:block w-80 flex-shrink-0 py-8 px-6">
                     <div className="sticky top-24 flex flex-col gap-6">
 
                         {/* Community Card */}
