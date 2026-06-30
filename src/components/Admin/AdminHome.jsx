@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminSidebar from './AdminSidebar';
 import PeopleIcon from '@mui/icons-material/People';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
@@ -35,7 +35,7 @@ export default function AdminHome() {
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
                         {cards.map((c, i) => (
                             <div key={i} className="glass border border-surfaceBorder p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all flex items-center gap-4">
-                                <div className={w-14 h-14 rounded-full flex items-center justify-center \ \}>
+                                <div className={`w-14 h-14 rounded-full flex items-center justify-center ${c.bg} ${c.color}`}>
                                     <c.Icon fontSize="large" />
                                 </div>
                                 <div className="flex flex-col">

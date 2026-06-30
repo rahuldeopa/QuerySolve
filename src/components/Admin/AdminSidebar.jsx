@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import PeopleIcon from '@mui/icons-material/People';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
@@ -33,8 +33,11 @@ export default function AdminSidebar() {
                         key={to}
                         to={to}
                         className={({ isActive }) =>
-                            \group px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2.5 \\
-                        }
+                            `group px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2.5 ${
+                                isActive
+                                    ? 'bg-rose-500/15 text-rose-500 border-l-2 border-rose-500 pl-3.5'
+                                    : 'text-textMuted hover:text-textMain hover:bg-surfaceHover hover:translate-x-1'
+                            }`
                     >
                         <Icon style={{ fontSize: '18px' }} className="transition-transform duration-200 group-hover:scale-110" />
                         {label}
