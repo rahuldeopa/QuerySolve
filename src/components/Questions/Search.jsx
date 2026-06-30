@@ -92,8 +92,8 @@ export default function Search() {
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
             <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row w-full">
                 <Sidebar />
-                <main className="flex-1 py-8 px-4 md:px-8 w-full border-none lg:border-r border-surfaceBorder overflow-hidden">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <main className="flex-1 py-8 px-4 lg:px-8 w-full border-none lg:border-r border-surfaceBorder overflow-hidden">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
                         <div className="flex flex-col gap-1">
                             <h1 className="text-3xl font-extrabold text-textMain tracking-tight">Search Results</h1>
                             <p className="text-textMuted font-medium text-sm">{questions.length} Questions Found</p>

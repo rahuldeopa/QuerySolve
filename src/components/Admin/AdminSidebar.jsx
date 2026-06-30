@@ -30,7 +30,7 @@ export default function AdminSidebar() {
             {/* Mobile Toggle Button (Only visible on small screens) */}
             <button 
                 onClick={() => setIsOpen(true)} 
-                className="md:hidden fixed bottom-6 left-6 z-40 p-3 bg-rose-500 text-white rounded-full shadow-lg shadow-rose-500/30 hover:scale-105 transition-transform"
+                className="md:hidden fixed bottom-6 left-6 z-[70] p-3 bg-rose-500 text-white rounded-full shadow-lg shadow-rose-500/30 hover:scale-105 transition-transform"
             >
                 <Menu />
             </button>
@@ -39,18 +39,18 @@ export default function AdminSidebar() {
             {isOpen && (
                 <div 
                     onClick={() => setIsOpen(false)} 
-                    className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity"
+                    className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-[65] transition-opacity"
                 ></div>
             )}
 
             {/* Sidebar Container */}
-            <div className={`fixed inset-y-0 left-0 z-50 md:z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex w-64 flex-shrink-0 min-h-screen md:min-h-auto md:h-auto`}>
+            <div className={`fixed inset-y-0 left-0 z-[70] md:z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex w-64 flex-shrink-0 min-h-screen md:min-h-auto md:h-auto`}>
                 <div className="glass border-r md:border border-surfaceBorder md:rounded-2xl w-full h-full p-4 flex flex-col gap-2 shadow-2xl md:shadow-sm md:sticky md:top-24 overflow-y-auto custom-scrollbar relative">
                     
                     {/* Mobile Close Button */}
                     <button 
                         onClick={() => setIsOpen(false)} 
-                        className="md:hidden absolute top-4 right-4 p-2 text-textMuted hover:text-textMain transition-colors bg-surface/50 rounded-full z-50"
+                        className="md:hidden absolute top-4 right-4 p-2 text-textMuted hover:text-textMain transition-colors bg-surface/50 rounded-full z-[80]"
                     >
                         <Close />
                     </button>

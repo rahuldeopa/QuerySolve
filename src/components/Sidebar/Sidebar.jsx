@@ -12,8 +12,8 @@ export default function Sidebar() {
         <>
             {/* Mobile Toggle Button (Only visible on small screens) */}
             <button 
-                onClick={() => setIsOpen(true)} 
-                className="lg:hidden fixed bottom-6 left-6 z-40 p-3 bg-primary text-white rounded-full shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
+                onClick={() => setIsOpen(true)}
+                className="lg:hidden fixed bottom-6 left-6 z-[70] p-3 bg-primary text-white rounded-full shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
             >
                 <Menu />
             </button>
@@ -22,18 +22,18 @@ export default function Sidebar() {
             {isOpen && (
                 <div 
                     onClick={() => setIsOpen(false)} 
-                    className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity"
+                    className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-[65] transition-opacity"
                 ></div>
             )}
 
             {/* Sidebar Container */}
-            <div className={`fixed inset-y-0 left-0 z-50 lg:z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:sticky lg:top-16 lg:translate-x-0 transition-transform duration-300 ease-in-out flex w-64 flex-shrink-0 h-screen lg:h-[calc(100vh-4rem)] border-r border-surfaceBorder bg-surface lg:bg-surface/30 flex-col overflow-y-auto no-scrollbar shadow-2xl lg:shadow-none`}>
+            <div className={`fixed inset-y-0 left-0 z-[70] lg:z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:sticky lg:top-16 lg:translate-x-0 transition-transform duration-300 ease-in-out flex w-64 flex-shrink-0 h-screen lg:h-[calc(100vh-4rem)] border-r border-surfaceBorder bg-surface lg:bg-surface/30 flex-col overflow-y-auto no-scrollbar shadow-2xl lg:shadow-none`}>
                 
                 <div className="py-6 px-4 flex flex-col gap-6 sticky top-0 lg:top-16 relative">
                     {/* Mobile Close Button */}
                     <button 
-                        onClick={() => setIsOpen(false)} 
-                        className="lg:hidden absolute top-3 right-3 z-50 p-2 text-textMuted hover:text-textMain transition-colors bg-surface/50 rounded-full"
+                        onClick={() => setIsOpen(false)}
+                        className="lg:hidden absolute top-3 right-3 z-[80] p-2 text-textMuted hover:text-textMain transition-colors bg-surface/50 rounded-full"
                     >
                         <Close />
                     </button>
@@ -44,6 +44,7 @@ export default function Sidebar() {
                     <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                         <NavLink
                             to="/"
+                            onClick={() => setIsOpen(false)}
                             className={({ isActive }) => `${itemBase} ${isActive ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                         >
                             <HomeOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Home
@@ -52,6 +53,7 @@ export default function Sidebar() {
                     <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                         <NavLink
                             to="/questions?filter=top"
+                            onClick={() => setIsOpen(false)}
                             className={({ isActive }) => `${itemBase} ${isActive && window.location.pathname === '/questions' && window.location.search === '?filter=top' ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                         >
                             <LocalFireDepartmentOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Popular
@@ -60,6 +62,7 @@ export default function Sidebar() {
                     <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                         <NavLink
                             to="/questions?filter=unanswered"
+                            onClick={() => setIsOpen(false)}
                             className={({ isActive }) => `${itemBase} ${isActive && window.location.pathname === '/questions' && window.location.search === '?filter=unanswered' ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                         >
                             <TrendingUpOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Unanswered
@@ -68,6 +71,7 @@ export default function Sidebar() {
                     <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                         <NavLink
                             to="/questions?filter=resolved"
+                            onClick={() => setIsOpen(false)}
                             className={({ isActive }) => `${itemBase} ${isActive && window.location.pathname === '/questions' && window.location.search === '?filter=resolved' ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                         >
                             <CheckCircleOutlineOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Resolved
@@ -83,6 +87,7 @@ export default function Sidebar() {
                     <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                         <NavLink
                             to="/tags"
+                            onClick={() => setIsOpen(false)}
                             className={({ isActive }) => `${itemBase} ${isActive ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                         >
                             <TagOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Tags & Topics
@@ -92,6 +97,7 @@ export default function Sidebar() {
                         <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>
                             <NavLink
                                 to="/profile"
+                                onClick={() => setIsOpen(false)}
                                 className={({ isActive }) => `${itemBase} ${isActive ? 'bg-surfaceHover text-textMain font-bold' : 'text-textMuted hover:bg-surfaceHover/50 hover:text-textMain'}`}
                             >
                                 <AccountCircleOutlined fontSize="small" className="transition-transform duration-200 group-hover:scale-110" /> Profile
@@ -126,12 +132,12 @@ export default function Sidebar() {
                             Log in to vote, post questions, and join discussions!
                         </p>
                         <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.96 }}>
-                            <NavLink to="/login" className="block w-full py-2 bg-gradient-to-r from-primary to-accent text-white text-center rounded-lg text-sm font-bold shadow-lg shadow-primary/30">
+                            <NavLink to="/login" onClick={() => setIsOpen(false)} className="block w-full py-2 bg-gradient-to-r from-primary to-accent text-white text-center rounded-lg text-sm font-bold shadow-lg shadow-primary/30">
                                 Log In
                             </NavLink>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }}>
-                            <NavLink to="/register" className="block w-full py-2 bg-transparent border border-surfaceBorder text-textMain text-center rounded-lg text-sm font-bold hover:bg-surfaceHover hover:border-primary/30 transition-colors">
+                            <NavLink to="/register" onClick={() => setIsOpen(false)} className="block w-full py-2 bg-transparent border border-surfaceBorder text-textMain text-center rounded-lg text-sm font-bold hover:bg-surfaceHover hover:border-primary/30 transition-colors">
                                 Sign Up
                             </NavLink>
                         </motion.div>
