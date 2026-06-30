@@ -66,6 +66,12 @@ export default function Questions() {
         if (filter === 'unanswered') {
             setActiveSort('open');
             unansweredQuestions();
+        } else if (filter === 'top') {
+            setActiveSort('top');
+            sortByVotes();
+        } else if (filter === 'resolved') {
+            setActiveSort('resolved');
+            answeredQuestions();
         } else {
             setActiveSort('latest');
             fetchAllQuestions();
@@ -76,17 +82,20 @@ export default function Questions() {
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const currentPosts = questions.slice(indexOfFirstPost, indexOfLastPost);
 
-    const paginate = pageNum => setcurrentPage(pageNum);
+    const paginate = pageNum => {
+        setcurrentPage(pageNum);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto px-0 sm:px-6 lg:px-8 flex flex-col md:flex-row w-full">
+            <div className="w-full max-w-[1920px] mx-auto px-0 sm:px-6 lg:px-8 flex flex-col lg:flex-row">
                 {/* Left Sidebar */}
                 <Sidebar />
 
                 {/* Middle Feed */}
-                <main className="flex-1 py-8 px-4 md:px-8 w-full md:border-r border-surfaceBorder overflow-hidden">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <main className="flex-1 py-8 px-4 lg:px-8 w-full lg:border-r border-surfaceBorder overflow-hidden">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
                         <div className="flex flex-col gap-1">
                             <h1 className="text-3xl font-extrabold text-textMain tracking-tight">Public Feed</h1>
                             <p className="text-textMuted font-medium text-sm">{questions.length} Active Discussions</p>
@@ -109,36 +118,7 @@ export default function Questions() {
                         </motion.div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <p className="text-textMuted font-medium text-xs uppercase tracking-widest flex items-center gap-2">
-                            <FilterList style={{ fontSize: '16px' }} /> Sort feed
-                        </p>
 
-                        <div className="flex bg-surface p-1 rounded-xl shadow-sm gap-1 relative z-0 w-full overflow-x-auto no-scrollbar">
-                            {[
-                                { key: 'latest', label: 'Latest', fn: fetchAllQuestions },
-                                { key: 'resolved', label: 'Resolved', fn: answeredQuestions },
-                                { key: 'top', label: 'Top Signal', fn: sortByVotes },
-                                { key: 'open', label: 'Open', fn: unansweredQuestions },
-                            ].map(({ key, label, fn }) => (
-                                <button
-                                    key={key}
-                                    onClick={() => { setActiveSort(key); setcurrentPage(1); fn(); }}
-                                    className={`relative px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 z-10 ${activeSort === key ? 'text-white' : 'text-textMuted hover:text-textMain hover:bg-surfaceHover/50'
-                                        }`}
-                                >
-                                    {activeSort === key && (
-                                        <motion.span
-                                            layoutId="activeSort"
-                                            transition={{ type: 'spring', bounce: 0.25, duration: 0.5 }}
-                                            className="absolute inset-0 rounded-lg bg-primary shadow-sm -z-10"
-                                        />
-                                    )}
-                                    {label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
 
                     <div className="mb-8">
                         <Posts posts={currentPosts} />
@@ -150,11 +130,11 @@ export default function Questions() {
                 </main>
 
                 {/* Right Sidebar */}
-                <aside className="hidden lg:block w-80 flex-shrink-0 py-8 px-6">
-                    <div className="sticky top-24 flex flex-col gap-6">
+                <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar py-8 px-6 border-t border-surfaceBorder lg:border-t-0">
+                    <div className="flex flex-col gap-6">
 
                         {/* Community Card */}
-                        <div className="glass rounded-2xl p-5  relative overflow-hidden shadow-lg shadow-primary/5">
+                        <div className="glass rounded-2xl p-5 relative overflow-hidden shadow-lg shadow-primary/5 shrink-0">
                             <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl -z-10"></div>
                             <h3 className="font-bold text-textMain mb-2 flex items-center gap-2">
                                 <GroupsIcon className="text-primary" /> About Community
@@ -177,7 +157,7 @@ export default function Questions() {
                         </div>
 
                         {/* Trending Tags */}
-                        <div className="bg-surface rounded-2xl p-5 border-theme hover:border-primary/20 shadow-lg transition-colors duration-300">
+                        <div className="bg-surface rounded-2xl p-5 border-theme hover:border-primary/20 shadow-lg transition-colors duration-300 shrink-0">
                             <h3 className="font-bold text-textMain text-sm mb-4 tracking-wide uppercase">Trending Tags</h3>
                             <div className="flex flex-wrap gap-2">
                                 {['react', 'nextjs', 'typescript', 'architecture', 'api'].map(tag => (
@@ -191,7 +171,7 @@ export default function Questions() {
                         </div>
 
                         {/* Recent Posts Mini-Feed */}
-                        <div className="bg-surface rounded-2xl p-5 border-theme hover:border-primary/20 shadow-lg transition-colors duration-300">
+                        <div className="bg-surface rounded-2xl p-5 border-theme hover:border-primary/20 shadow-lg transition-colors duration-300 shrink-0">
                             <h3 className="font-bold text-textMain text-sm mb-4 tracking-wide uppercase">Recent Activity</h3>
                             <div className="flex flex-col gap-1">
                                 {questions.slice(0, 3).map(q => (

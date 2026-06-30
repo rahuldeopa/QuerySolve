@@ -1,5 +1,6 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import Editor from './components/Editor/Editor';
 import Homepage from './components/Homepage/Homepage';
@@ -28,10 +29,19 @@ import AdminHome from './components/Admin/AdminHome';
 import Adminanswer from './components/Admin/AdminAnswer';
 import UserProfileAnalysis from './components/Admin/Analysis/UserProfileAnalysis';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Navbar />
         <Routes>
           <Route path="/" element={<Questions />} />

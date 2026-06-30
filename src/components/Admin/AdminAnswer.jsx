@@ -74,22 +74,22 @@ export default function Adminanswer() {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+            <div className="w-full max-w-[1920px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
                 <ProfileSidebar />
                 <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
                     <h1 className="text-3xl font-extrabold tracking-tight">Manage Answers</h1>
 
                     {/* filter based on date , tags and status  */}
-                    <div className="glass border border-surfaceBorder rounded-xl p-6 flex flex-col sm:flex-row gap-4 items-center">
-                        <div className="flex items-center gap-3">
+                    <div className="glass border border-surfaceBorder rounded-xl p-6 flex flex-col sm:flex-row flex-wrap gap-4 items-start sm:items-center justify-between">
+                        <div className="flex flex-wrap items-center gap-3">
                             <span className="font-bold text-sm text-textMuted uppercase">Filter:</span>
-                            <input type="date" name="startDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50" />
+                            <input type="date" name="startDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50 text-textMain focus:outline-none" />
                             <span className="text-textMuted font-bold text-sm">TO</span>
-                            <input type="date" name="endDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50" />
+                            <input type="date" name="endDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50 text-textMain focus:outline-none" />
                         </div>
                         
-                        <div className="flex items-center gap-4 sm:ml-auto">
-                            <select name="tags" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <select name="tags" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50 text-textMain focus:outline-none min-w-[120px]">
                                 <option value="none" defaultValue hidden>Select Tag</option>
                                 {usedTags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
                             </select>

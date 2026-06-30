@@ -267,7 +267,7 @@ useEffect(() => {
     
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+            <div className="w-full max-w-[1920px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
                 <AdminSidebar />
                 <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
                     <h1 className="text-3xl font-extrabold tracking-tight">Platform Analysis</h1>

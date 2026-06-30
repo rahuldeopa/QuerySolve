@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SensorsIcon from '@mui/icons-material/Sensors'; // Using as Signal icon
 import BlurOffIcon from '@mui/icons-material/BlurOff'; // Using as Noise icon
 
-export default function TechVote({ initialScore, onUpvote, onDownvote }) {
-    const [voteStatus, setVoteStatus] = useState('none'); // 'signal', 'noise', 'none'
+export default function TechVote({ initialScore, initialVoteStatus, onUpvote, onDownvote }) {
+    const [voteStatus, setVoteStatus] = useState(initialVoteStatus || 'none'); // 'signal', 'noise', 'none'
+    
+    // Update local state if the prop changes
+    React.useEffect(() => {
+        setVoteStatus(initialVoteStatus || 'none');
+    }, [initialVoteStatus]);
     const [animateSignal, setAnimateSignal] = useState(false);
     const [animateNoise, setAnimateNoise] = useState(false);
 
@@ -20,7 +25,7 @@ export default function TechVote({ initialScore, onUpvote, onDownvote }) {
         if (onUpvote) onUpvote(e);
         
         // Optimistic color update
-        setVoteStatus('signal');
+        setVoteStatus(prev => prev === 'signal' ? 'none' : 'signal');
     };
 
     const handleNoise = async (e) => {
@@ -35,7 +40,7 @@ export default function TechVote({ initialScore, onUpvote, onDownvote }) {
         if (onDownvote) onDownvote(e);
         
         // Optimistic color update
-        setVoteStatus('noise');
+        setVoteStatus(prev => prev === 'noise' ? 'none' : 'noise');
     };
 
     return (

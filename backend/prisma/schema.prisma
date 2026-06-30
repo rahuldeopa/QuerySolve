@@ -11,9 +11,10 @@ model User {
   id        String     @id @default(uuid())
   username  String
   email     String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  questions Question[]
+  password     String
+  profilePhoto String?
+  createdAt    DateTime   @default(now())
+  questions    Question[]
   answers   Answer[]
   comments  Comment[]
   votes     Vote[]
@@ -39,6 +40,7 @@ model Question {
   tags      String
   postedBy  String
   votes     Int       @default(0) // Aggregated Signal Score
+  status    String    @default("Open")
   createdAt DateTime  @default(now())
   
   userId    String

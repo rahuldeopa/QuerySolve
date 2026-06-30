@@ -13,6 +13,9 @@ import TechVote from '../TechVote';
 import Sidebar from '../Sidebar/Sidebar';
 import Button from '../common/Button';
 import Alert from '../common/Alert';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import UserAvatar from '../common/UserAvatar';
 
 export default function Content(props) {
     const navigate = useNavigate();
@@ -28,6 +31,7 @@ export default function Content(props) {
     const [loginstatus, setloginstatus] = useState(false);
     const [quevoteStatus, setqueVoteStatus] = useState({});
     const [queVote, setQueVote] = useState(0);
+    const [myVotes, setMyVotes] = useState([]);
 
     const [show, setShow] = useState(false);
     const [comment, setComment] = useState({});
@@ -121,6 +125,21 @@ export default function Content(props) {
         }
     }
 
+    const markResolved = async (e, id) => {
+        e.preventDefault();
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/resolve/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+        });
+        const json = await response.json();
+        if (json.status === "success") {
+            setQuestion({ ...question, status: 'Answered' });
+        }
+    }
+
     const upvote = async (e, id) => {
         if (localStorage.getItem("username") !== null) {
             e.preventDefault();
@@ -173,6 +192,23 @@ export default function Content(props) {
         setQueVote(json);
     }
 
+    const fetchMyVotes = async () => {
+        if (!localStorage.getItem('token')) return;
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/question/myVotes`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token') 
+                },
+            });
+            const json = await response.json();
+            setMyVotes(Array.isArray(json) ? json : []);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     const onChange = (e) => {
         setComment({ ...comment, [e.target.name]: e.target.value })
     }
@@ -204,6 +240,7 @@ export default function Content(props) {
         fetchAnswers(params.type);
         fetchVotes();
         fetchQueVotes(params.type);
+        fetchMyVotes();
     }, [state, voteStatus, quevoteStatus, params.type, navigate]);
 
     // Simulated Smart AI Auto Analysis for design elevation
@@ -219,11 +256,11 @@ export default function Content(props) {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row w-full">
+            <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row w-full">
 
                 <Sidebar />
 
-                <main className="flex-1 py-8 px-4 md:px-8 w-full md:border-r border-surfaceBorder overflow-hidden">
+                <main className="flex-1 py-8 px-4 lg:px-8 w-full lg:border-r border-surfaceBorder overflow-hidden">
 
                     {/* Alert Banners */}
                     <div className="flex flex-col gap-4">
@@ -253,18 +290,44 @@ export default function Content(props) {
                                 {/* Vote Controller (TechVote component) */}
                                 <TechVote
                                     initialScore={queVote}
+                                    initialVoteStatus={myVotes.find(v => v.questionId === question.id)?.type.toLowerCase() || 'none'}
                                     onUpvote={(e) => upvoteQue(e, question.id)}
                                     onDownvote={(e) => downvoteQue(e, question.id)}
                                 />
 
                                 {/* Content Details */}
                                 <div className="flex-1 flex flex-col gap-4">
-                                    <h1 className="text-2xl md:text-3xl font-extrabold text-textMain tracking-tight leading-tight">
-                                        {question.title}
-                                    </h1>
+                                    <div className="flex justify-between items-start gap-4">
+                                        <h1 className="text-2xl md:text-3xl font-extrabold text-textMain tracking-tight leading-tight">
+                                            {question.title}
+                                        </h1>
+                                        
+                                        {question.status === "Answered" ? (
+                                            <span className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                                <CheckCircleIcon style={{ fontSize: '16px' }} /> Resolved
+                                            </span>
+                                        ) : localStorage.getItem("username") === question.postedBy ? (
+                                            <button 
+                                                onClick={(e) => markResolved(e, question.id)}
+                                                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-surfaceHover text-textMain border border-surfaceBorder hover:border-emerald-500/40 hover:text-emerald-500 hover:bg-emerald-500/10 transition-colors"
+                                            >
+                                                <CheckCircleOutlineIcon style={{ fontSize: '16px' }} /> Mark as Resolved
+                                            </button>
+                                        ) : null}
+                                    </div>
 
-                                    <div className="flex flex-wrap gap-4 text-xs text-textMuted border-b border-surfaceBorder pb-4 mt-1">
-                                        <span className="flex items-center gap-1"><PersonOutlineIcon className="w-3.5 h-3.5" /> Asked by <strong className="text-textMain">{question.postedBy || "Anonymous"}</strong></span>
+                                    <div className="flex flex-wrap gap-4 text-xs text-textMuted border-b border-surfaceBorder pb-4 mt-1 items-center">
+                                        <span className="flex items-center gap-2">
+                                            <UserAvatar username={question.postedBy} className="w-5 h-5 text-[10px]" /> 
+                                            Asked by <strong className="text-textMain flex items-center">
+                                                {question.postedBy || "Anonymous"}
+                                                {question.postedBy === 'admin' && (
+                                                    <span className="ml-1.5 inline-flex items-center justify-center px-1.5 py-[2px] rounded bg-primary text-white text-[9px] font-bold tracking-widest leading-none shadow-sm shadow-primary/20" title="Admin / Developer">
+                                                        DEV <VerifiedIcon className="ml-0.5" style={{ fontSize: '10px' }} />
+                                                    </span>
+                                                )}
+                                            </strong>
+                                        </span>
                                         <span className="flex items-center gap-1"><AccessTimeIcon className="w-3.5 h-3.5" /> {question.createdAt ? question.createdAt.slice(0, 10) : ''}</span>
                                     </div>
 
@@ -313,6 +376,7 @@ export default function Content(props) {
                                         {/* Vote controller for answer */}
                                         <TechVote
                                             initialScore={vote[ans.id] || 0}
+                                            initialVoteStatus={myVotes.find(v => v.answerId === ans.id)?.type.toLowerCase() || 'none'}
                                             onUpvote={(e) => upvote(e, ans.id)}
                                             onDownvote={(e) => downvote(e, ans.id)}
                                         />
@@ -322,10 +386,15 @@ export default function Content(props) {
                                             {/* Header details */}
                                             <div className="flex justify-between items-center">
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-6 h-6 rounded-full bg-primary/25 text-primary flex items-center justify-center text-xs font-bold">
-                                                        {ans.postedBy ? ans.postedBy.charAt(0).toUpperCase() : '?'}
-                                                    </div>
-                                                    <span className="text-sm font-semibold text-textMain">{ans.postedBy}</span>
+                                                    <UserAvatar username={ans.postedBy} className="w-6 h-6 text-[10px]" />
+                                                    <span className="text-sm font-semibold text-textMain flex items-center">
+                                                        {ans.postedBy}
+                                                        {ans.postedBy === 'admin' && (
+                                                            <span className="ml-1.5 inline-flex items-center justify-center px-1.5 py-[2px] rounded bg-primary text-white text-[9px] font-bold tracking-widest leading-none shadow-sm shadow-primary/20" title="Admin / Developer">
+                                                                DEV <VerifiedIcon className="ml-0.5" style={{ fontSize: '10px' }} />
+                                                            </span>
+                                                        )}
+                                                    </span>
                                                 </div>
 
                                                 {ans.status === "Accepted" && (
@@ -379,14 +448,14 @@ export default function Content(props) {
                 </main>
 
                 {/* Right Column: AI Assistant Insights Panel */}
-                <aside className="hidden lg:block w-80 flex-shrink-0 py-8 px-6">
-                    <div className="sticky top-24 flex flex-col gap-6">
+                <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar py-8 px-6 border-t border-surfaceBorder lg:border-t-0">
+                    <div className="flex flex-col gap-6">
                         {aiAnalysis && (
                             <motion.div
                                 initial={{ opacity: 0, y: 16 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-                                className="rounded-2xl bg-gradient-to-br from-primary/40 via-accent/30 to-secondary/40 p-px shadow-xl shadow-primary/10"
+                                className="rounded-2xl bg-gradient-to-br from-primary/40 via-accent/30 to-secondary/40 p-px shadow-xl shadow-primary/10 shrink-0"
                             >
                                 <div className="glass rounded-[15px] p-6 border-0 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>

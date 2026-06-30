@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage(require('os').tmpdir() + '/scratch');
 const prisma = require('../prisma');
@@ -8,6 +10,7 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'Darshitisagoodboy';
 const router = express.Router();
+const fetchuser = require('../middlewares/fetchuser');
 
 router.post('/createuser', [
     body('username', 'Name Must have atleast 3 characters').isLength({ min: 3 }),
@@ -102,9 +105,21 @@ router.post('/login', [
             return res.status(400).json({ error: "enter Correct login Credentials" });
         }
 
+        // Sync admin to the User table so foreign keys (userId/postedId) work when they post!
+        let adminUserSync = await prisma.user.findUnique({ where: { email: admin.email } });
+        if (!adminUserSync) {
+            adminUserSync = await prisma.user.create({
+                data: {
+                    username: admin.username,
+                    email: admin.email,
+                    password: admin.password
+                }
+            });
+        }
+
         const admindata = {
             user: {
-                id: admin.id,
+                id: adminUserSync.id, // Use User ID for Prisma foreign keys
                 username: admin.username
             }
         }
@@ -118,6 +133,76 @@ router.post('/login', [
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.post('/uploadProfilePhoto', fetchuser, async (req, res) => {
+    try {
+        const { photo } = req.body; // base64 string
+        
+        const matches = photo.match(/^data:(.*?);base64,(.+)$/);
+        if (!matches) {
+            return res.status(400).json({ error: "Invalid image format" });
+        }
+        
+        const mimeType = matches[1];
+        const ext = mimeType.split('/')[1] || 'jpg';
+        const base64Data = matches[2];
+        const imgBuffer = Buffer.from(base64Data, 'base64');
+        
+        const uploadsDir = path.join(__dirname, '../../uploads');
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        
+        const filename = `avatar_${req.user.id}_${Date.now()}.${ext.replace('+', '')}`;
+        const filePath = path.join(uploadsDir, filename);
+        
+        fs.writeFileSync(filePath, imgBuffer);
+
+        await prisma.user.update({
+            where: { id: req.user.id },
+            data: { profilePhoto: filename }
+        });
+        res.json({ success: true, message: "Profile photo updated successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get('/profilePhoto/:username', async (req, res) => {
+    try {
+        const user = await prisma.user.findFirst({ where: { username: req.params.username } });
+        if (user && user.profilePhoto) {
+            // Backwards compatibility for old Base64 uploads
+            if (user.profilePhoto.startsWith('data:')) {
+                const matches = user.profilePhoto.match(/^data:(.*?);base64,(.+)$/);
+                if (matches) {
+                    const contentType = matches[1];
+                    const base64Data = matches[2];
+                    const imgBuffer = Buffer.from(base64Data, 'base64');
+                    res.writeHead(200, {
+                        'Content-Type': contentType,
+                        'Content-Length': imgBuffer.length,
+                        'Cache-Control': 'public, max-age=86400'
+                    });
+                    res.end(imgBuffer);
+                    return;
+                }
+            } else {
+                // Read from file system
+                const filePath = path.join(__dirname, '../../uploads', user.profilePhoto);
+                if (fs.existsSync(filePath)) {
+                    res.sendFile(filePath, { maxAge: 86400000 });
+                    return;
+                }
+            }
+        }
+        res.status(404).send("Not found");
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error");
     }
 });
 

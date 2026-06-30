@@ -23,7 +23,7 @@ export default function Tags() {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row">
+            <div className="w-full max-w-[1920px] mx-auto flex flex-col lg:flex-row">
                 <Sidebar />
                 
                 <main className="flex-1 py-8 px-4 md:px-8">

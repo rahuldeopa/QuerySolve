@@ -5,6 +5,7 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SearchIcon from '@mui/icons-material/Search';
 import Logo from '../common/Logo';
+import UserAvatar from '../common/UserAvatar';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -52,8 +53,8 @@ export default function Navbar() {
   const userInitial = username ? username.charAt(0).toUpperCase() : '';
 
   return (
-    <nav className="sticky top-0 z-50 glass border-b border-surfaceBorder transition-all duration-300">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-[60] glass border-b border-surfaceBorder transition-all duration-300">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
 
           {/* Brand Logo */}
@@ -112,8 +113,8 @@ export default function Navbar() {
               {loginStatus ? (
                 <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4">
                   <NavLink to="/analysis" className="group flex items-center gap-2 hover:bg-surfaceHover px-2 py-1 rounded-xl transition-all duration-200">
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm border border-primary/30 transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/30 group-hover:scale-105">
-                      {userInitial}
+                    <div className="transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/30 group-hover:scale-105 rounded-full overflow-hidden">
+                      <UserAvatar username={username} className="w-8 h-8 text-xs shadow-inner" />
                     </div>
                     <span className="text-sm font-medium text-textMain hidden sm:block">{username}</span>
                   </NavLink>

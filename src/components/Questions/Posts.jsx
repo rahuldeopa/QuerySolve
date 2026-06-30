@@ -8,6 +8,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutlined';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AuthModal from '../AuthModal';
+import UserAvatar from '../common/UserAvatar';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 export default function Posts({ posts }) {
     const [noOfAns, setnoOfAns] = useState({});
@@ -52,12 +54,19 @@ export default function Posts({ posts }) {
         }
     };
 
+    const extractImage = (htmlContent) => {
+        if (!htmlContent) return null;
+        const match = htmlContent.match(/<img[^>]+src="([^">]+)"/);
+        return match ? match[1] : null;
+    };
+
     return (
         <div className="flex flex-col gap-6 p-1">
             {posts.map((question, index) => {
                 const votesCount = vote[question.id] || 0;
                 const answersCount = noOfAns[question.id] || 0;
                 const aiSummary = getAiSummary(question.question);
+                const extractedImg = extractImage(question.question);
 
                 return (
                     <motion.div
@@ -84,7 +93,7 @@ export default function Posts({ posts }) {
                                         <AutoAwesomeIcon className="w-3 h-3" style={{ fontSize: '12px' }} />
                                         AI Autocategorized
                                     </span>
-                                    {answersCount > 0 ? (
+                                    {question.status === 'Answered' ? (
                                         <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border-theme">
                                             Resolved
                                         </span>
@@ -123,6 +132,27 @@ export default function Posts({ posts }) {
                                 {question.title}
                             </motion.div>
 
+                            {/* Extracted Thumbnail (Reddit Style) */}
+                            {extractedImg && (
+                                <div 
+                                    className="w-full rounded-xl overflow-hidden cursor-pointer border border-surfaceBorder/30 bg-surfaceHover shadow-sm mt-1"
+                                    onClick={(e) => {
+                                        if (!localStorage.getItem('token')) {
+                                            e.preventDefault();
+                                            setShowAuthModal(true);
+                                        } else {
+                                            navigate(`/question/${question.id}`);
+                                        }
+                                    }}
+                                >
+                                    <img 
+                                        src={extractedImg} 
+                                        alt="Post thumbnail" 
+                                        className="w-full max-h-[300px] object-cover hover:scale-[1.02] transition-transform duration-500 ease-out"
+                                    />
+                                </div>
+                            )}
+
                             {/* AI Summary Section */}
                             <div className="relative rounded-lg bg-surfaceHover/40 border-l-2 border-accent/60 pl-4 pr-3.5 py-3">
                                 <div className="flex items-center gap-1.5 mb-1.5">
@@ -146,13 +176,56 @@ export default function Posts({ posts }) {
                                 ))}
                             </div>
 
+                            {/* Top Thread Preview */}
+                            {question.answers && question.answers.length > 0 && (
+                                <div className="mt-2 ml-4 md:ml-8 border-l-2 border-surfaceBorder pl-4 py-2 relative">
+                                    <div className="absolute -left-[17px] top-6 w-4 h-[2px] bg-surfaceBorder"></div>
+                                    <div className="bg-surfaceHover/30 rounded-xl p-4 border border-surfaceBorder shadow-inner hover:bg-surfaceHover/50 transition-colors cursor-pointer" onClick={(e) => {
+                                        if (!localStorage.getItem('token')) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setShowAuthModal(true);
+                                        } else {
+                                            navigate(`/question/${question.id}`);
+                                        }
+                                    }}>
+                                        <div className="flex justify-between items-start mb-2 text-xs">
+                                            <div className="flex items-center gap-2">
+                                                <UserAvatar username={question.answers[0].postedBy} className="w-5 h-5 text-[9px]" />
+                                                <span className="font-semibold text-textMain flex items-center">
+                                                    {question.answers[0].postedBy}
+                                                    {question.answers[0].postedBy === 'admin' && (
+                                                        <span className="ml-1.5 inline-flex items-center justify-center px-1.5 py-[2px] rounded bg-primary text-white text-[8px] font-bold tracking-widest leading-none shadow-sm shadow-primary/20">
+                                                            DEV <VerifiedIcon className="ml-[1px]" style={{ fontSize: '9px' }} />
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            </div>
+                                            {question.answers[0].status === "Accepted" && (
+                                                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-wider">
+                                                    Accepted
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="text-sm text-textMuted line-clamp-2 prose prose-slate max-w-none text-xs leading-relaxed">
+                                            {parse(question.answers[0].answer)}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Footer: User Details & Metadata */}
                             <div className="flex justify-between items-center pt-4 border-t border-surfaceBorder mt-2 text-xs text-textMuted">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-primary/30 to-accent/20 flex items-center justify-center text-primary font-bold text-xs border-theme">
-                                        {question.postedBy ? question.postedBy.charAt(0).toUpperCase() : '?'}
-                                    </div>
-                                    <span className="font-semibold text-textMain">{question.postedBy || "Anonymous"}</span>
+                                    <UserAvatar username={question.postedBy} className="w-6 h-6 text-[10px]" />
+                                    <span className="font-semibold text-textMain flex items-center">
+                                        {question.postedBy || "Anonymous"}
+                                        {question.postedBy === 'admin' && (
+                                            <span className="ml-1.5 inline-flex items-center justify-center px-1.5 py-[2px] rounded bg-primary text-white text-[9px] font-bold tracking-widest leading-none shadow-sm shadow-primary/20" title="Admin / Developer">
+                                                DEV <VerifiedIcon className="ml-0.5" style={{ fontSize: '10px' }} />
+                                            </span>
+                                        )}
+                                    </span>
                                 </div>
 
                                 <div className="flex items-center gap-1.5">

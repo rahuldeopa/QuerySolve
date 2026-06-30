@@ -18,6 +18,8 @@ export default function Button({
         variantStyle = "bg-surfaceHover border border-surfaceBorder text-textMain hover:bg-surfaceBorder";
     } else if (variant === 'outline') {
         variantStyle = "bg-transparent border border-primary text-primary hover:bg-primary/5";
+    } else if (variant === 'danger') {
+        variantStyle = "bg-rose-500 text-white shadow-lg shadow-rose-500/20 hover:bg-rose-600";
     } else if (variant === 'ghost') {
         variantStyle = "bg-transparent text-textMuted hover:text-textMain hover:bg-surfaceHover shadow-none";
     }

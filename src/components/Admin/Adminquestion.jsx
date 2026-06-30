@@ -8,11 +8,15 @@ import AdminSidebar from './AdminSidebar';
 import Pagination from '../MyProfile/MyQuestions/Pagination';
 import ProfileSidebar from './AdminSidebar';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import UserAvatar from '../common/UserAvatar';
+import ConfirmModal from '../common/ConfirmModal';
 
 export default function Adminquestion() {
-
+    const [confirmModal, setConfirmModal] = useState({ isOpen: false, type: '', id: null });
     const [filters, setFilters] = useState({ startDate: "", endDate: "", tags: "" });
 
     const onChange = (e) => {
@@ -138,6 +142,26 @@ export default function Adminquestion() {
         }
     }
 
+    const markResolved = async (id) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin/resolveQuestion/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                setQuestions(prev => prev.map(q => q.id === id ? { ...q, status: 'Answered' } : q));
+                setFilteredQue(prev => prev.map(q => q.id === id ? { ...q, status: 'Answered' } : q));
+                alert("Question marked as resolved!");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Failed to mark question as resolved.");
+        }
+    }
+
     useEffect(() => {
         // fetchAllQuestions();
         FindFrequencyOfAns();
@@ -156,7 +180,7 @@ export default function Adminquestion() {
    
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+            <div className="w-full max-w-[1920px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
                 <AdminSidebar />
                 <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
                     <h1 className="text-3xl font-extrabold tracking-tight">Manage Questions</h1>
@@ -200,8 +224,9 @@ export default function Adminquestion() {
                                         ))}
                                     </div>
                                     
-                                    <div className="text-xs text-textMuted mt-2">
-                                        Asked {question.createdAt.slice(0, 10)} by <span className="text-primary font-semibold">{question.postedBy}</span>
+                                    <div className="flex items-center gap-2 text-xs text-textMuted mt-2 pt-2 border-t border-surfaceBorder">
+                                        <UserAvatar username={question.postedBy} className="w-5 h-5 text-[10px]" />
+                                        <span>Asked {question.createdAt.slice(0, 10)} by <strong className="text-textMain">{question.postedBy || 'Anonymous'}</strong></span>
                                     </div>
                                 </div>
 
@@ -209,15 +234,42 @@ export default function Adminquestion() {
                                     <div className="text-xs font-bold text-textMuted bg-surfaceHover px-3 py-1 rounded-lg border border-surfaceBorder text-center">
                                         {noOfAns[question.id] || 0} Answers
                                     </div>
-                                    <button onClick={() => deleteQuestion(question.id)} className="w-full px-3 py-1.5 text-xs font-bold text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors flex items-center justify-center gap-1">
-                                        <DeleteIcon style={{ fontSize: '14px' }} /> Delete
-                                    </button>
+                                    <div className="flex flex-col gap-2 w-full mt-auto">
+                                        {question.status !== "Answered" ? (
+                                            <button onClick={() => setConfirmModal({ isOpen: true, type: 'resolve', id: question.id })} className="w-full px-3 py-1.5 text-xs font-bold text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-lg transition-colors flex items-center justify-center gap-1">
+                                                <CheckCircleOutlineIcon style={{ fontSize: '14px' }} /> Mark Resolved
+                                            </button>
+                                        ) : (
+                                            <div className="w-full px-3 py-1.5 text-xs font-bold text-emerald-500 border border-emerald-500/30 rounded-lg flex items-center justify-center gap-1 bg-emerald-500/5 cursor-default">
+                                                <CheckCircleIcon style={{ fontSize: '14px' }} /> Resolved
+                                            </div>
+                                        )}
+                                        <button onClick={() => setConfirmModal({ isOpen: true, type: 'delete', id: question.id })} className="w-full px-3 py-1.5 text-xs font-bold text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors flex items-center justify-center gap-1">
+                                            <DeleteIcon style={{ fontSize: '14px' }} /> Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ isOpen: false, type: '', id: null })}
+                onConfirm={() => {
+                    if (confirmModal.type === 'delete') {
+                        deleteQuestion(confirmModal.id);
+                    } else if (confirmModal.type === 'resolve') {
+                        markResolved(confirmModal.id);
+                    }
+                }}
+                title={confirmModal.type === 'delete' ? "Delete Question" : "Mark Resolved"}
+                message={confirmModal.type === 'delete' ? "Are you sure you want to permanently delete this question? This action cannot be undone." : "Are you sure you want to manually mark this question as resolved?"}
+                confirmText={confirmModal.type === 'delete' ? "Delete Question" : "Mark Resolved"}
+                isDanger={confirmModal.type === 'delete'}
+            />
         </div>
     );
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Chart from '../../charts/Chart'
-import {useParams} from 'react-router-dom'
-import './userProfileanalysis.css';
+import Chart from '../../charts/Chart';
+import { useParams, useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function UserProfileAnalysis() {
     const params = useParams();
+    const navigate = useNavigate();
     let username = params.username;
 
     const [filters, setFilters] = useState({ startDate: "", endDate: "" });
@@ -110,8 +111,8 @@ export default function UserProfileAnalysis() {
          if (filters.startDate && filters.endDate) {
             let cnt = 0;
             acceptedansweredQues.map(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate) {
+                const tags = ques?.tags || "";
+                if (ques?.createdAt?.substring(0, 10) >= filters.startDate && ques?.createdAt?.substring(0, 10) <= filters.endDate) {
                     cnt++;
                     tags.split(" ").map(tag =>
                         ac_ans_freqOfTags[tag] = 0
@@ -120,8 +121,8 @@ export default function UserProfileAnalysis() {
             })
 
             acceptedansweredQues.map(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate)
+                const tags = ques?.tags || "";
+                if (ques?.createdAt?.substring(0, 10) >= filters.startDate && ques?.createdAt?.substring(0, 10) <= filters.endDate)
                     tags.split(" ").map(tag =>
                         ac_ans_freqOfTags[tag] = ac_ans_freqOfTags[tag] + 1
                     )
@@ -131,14 +132,14 @@ export default function UserProfileAnalysis() {
         }
         else {
             acceptedansweredQues.map(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").map(tag =>
                     ac_ans_freqOfTags[tag] = 0
                 )
             })
 
             acceptedansweredQues.map(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").map(tag =>
                     ac_ans_freqOfTags[tag] = ac_ans_freqOfTags[tag] + 1
                 )
@@ -181,8 +182,8 @@ export default function UserProfileAnalysis() {
         if (filters.startDate && filters.endDate) {
             let cnt = 0;
             answeredQues.map(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate) {
+                const tags = ques?.tags || "";
+                if (ques?.createdAt?.substring(0, 10) >= filters.startDate && ques?.createdAt?.substring(0, 10) <= filters.endDate) {
                     cnt++;
                     tags.split(" ").map(tag =>
                         ans_freqOfTags[tag] = 0
@@ -191,8 +192,8 @@ export default function UserProfileAnalysis() {
             })
 
             answeredQues.map(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate)
+                const tags = ques?.tags || "";
+                if (ques?.createdAt?.substring(0, 10) >= filters.startDate && ques?.createdAt?.substring(0, 10) <= filters.endDate)
                     tags.split(" ").map(tag =>
                         ans_freqOfTags[tag] = ans_freqOfTags[tag] + 1
                     )
@@ -202,14 +203,14 @@ export default function UserProfileAnalysis() {
         }
         else {
             answeredQues.map(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").map(tag =>
                     ans_freqOfTags[tag] = 0
                 )
             })
 
             answeredQues.map(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").map(tag =>
                     ans_freqOfTags[tag] = ans_freqOfTags[tag] + 1
                 )
@@ -228,36 +229,60 @@ export default function UserProfileAnalysis() {
     }, [answeredQues, filters]);
 
     return (
-        <div>
-            <div className="container" Style="height:100vh; margin-top:13vh; z-index:1; background-color:white">
-                
-                <div className='header_and_content'>
-                   
-
-                    <div className='filters_menu'>
-                        <input type="date" name="startDate" onChange={onChange} />
-                        <strong Style="display:inline">To</strong>
-                        <input type="date" name="endDate" onChange={onChange} />
+        <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => navigate(-1)}
+                        className="p-2 rounded-xl bg-surface border border-surfaceBorder text-textMuted hover:text-primary hover:border-primary/30 transition-all duration-300"
+                    >
+                        <ArrowBackIcon />
+                    </button>
+                    <div>
+                        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                            Analysis: {username}
+                        </h1>
+                        <p className="text-textMuted text-sm mt-1">Detailed performance and activity metrics</p>
                     </div>
-                    <div className="title_row1">
-                        {/* <p className="title1">Total No of Questions asked by You: {questions.length}</p>
-                            <p className="title2">Total No of Questions asked by You: {questions.length}</p> */}
-                    </div>
-                    <div className="charts">
-                        <div className="first_row">
-                            <Chart title={"Total " + queLen + " questions asked by you & used tags as follows"} count={count} Tags={Tags} />
-                            <Chart title={"Total " + ansLen + " answers given by you & used tags as follows"} count={Anscount} Tags={AnsTags} />
-                        </div>
-                        <div className="last_chart">
-                            <Chart title={"Your total " + actAnsLen + " answers acceted & used tags as follows"} count={AcAnscount} Tags={AcAnsTags} />
-                        </div>
-                    </div>
+                </div>
 
-                    <hr Style="border: 0.7px solid" />
-
+                {/* Filters */}
+                <div className="glass p-3 rounded-2xl border border-surfaceBorder flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-textMuted">From</span>
+                        <input 
+                            type="date" 
+                            name="startDate" 
+                            onChange={onChange} 
+                            className="bg-surface border border-surfaceBorder text-textMain text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:border-primary/50"
+                        />
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-textMuted">To</span>
+                        <input 
+                            type="date" 
+                            name="endDate" 
+                            onChange={onChange} 
+                            className="bg-surface border border-surfaceBorder text-textMain text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:border-primary/50"
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
 
+            {/* Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div className="glass rounded-2xl border border-surfaceBorder p-6 hover:border-primary/30 transition-colors duration-300">
+                    <Chart title={`${queLen} Questions Asked`} count={count} Tags={Tags} />
+                </div>
+                <div className="glass rounded-2xl border border-surfaceBorder p-6 hover:border-primary/30 transition-colors duration-300">
+                    <Chart title={`${ansLen} Answers Provided`} count={Anscount} Tags={AnsTags} />
+                </div>
+            </div>
+            
+            <div className="glass rounded-2xl border border-surfaceBorder p-6 hover:border-primary/30 transition-colors duration-300 w-full lg:w-2/3 mx-auto">
+                <Chart title={`${actAnsLen} Answers Accepted`} count={AcAnscount} Tags={AcAnsTags} />
+            </div>
+        </div>
     );
 }

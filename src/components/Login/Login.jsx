@@ -36,16 +36,16 @@ function Login() {
           ['09', 'Sep'], ['10', 'Oct'], ['11', 'Nov'], ['12', 'Dec']
         ]);
 
-        const year = json.date.substring(0, 4);
-        const mn = json.date.substring(5, 7);
-        
-        localStorage.setItem("since", month.get(mn) + " " + year);
+        if (json.date) {
+          const year = json.date.substring(0, 4);
+          const mn = json.date.substring(5, 7);
+          localStorage.setItem("since", month.get(mn) + " " + year);
+        }
         localStorage.setItem("Usertype", json.userType);
         localStorage.setItem("token", json.success);
 
         setTimeout(() => {
-          navigate(json.userType === "admin" ? "/adminHome" : "/");
-          window.location.reload(true);
+          window.location.href = json.userType === "admin" ? "/adminHome" : "/";
         }, 1500);
       } else {
         setErrorMsg('Invalid Credentials');

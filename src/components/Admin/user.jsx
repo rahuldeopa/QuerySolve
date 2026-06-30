@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import UserAvatar from '../common/UserAvatar';
 
 
 export default function AdminUser() {
@@ -60,7 +61,7 @@ export default function AdminUser() {
 
   return (
     <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-        <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+        <div className="w-full max-w-[1920px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
             <AdminSidebar />
             <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
                 <h1 className="text-3xl font-extrabold tracking-tight">Manage Users</h1>
@@ -88,9 +89,12 @@ export default function AdminUser() {
                             {filteredUsers.map((user) => (
                                 <tr key={user.id} className="hover:bg-surfaceHover/50 transition-colors">
                                     <td className="px-6 py-4 text-sm font-semibold text-textMain">
-                                        <NavLink to={`/UserProfileAnalysis/${user.username}`} className="text-primary hover:underline">
-                                            {user.username}
-                                        </NavLink>
+                                        <div className="flex items-center gap-3">
+                                            <UserAvatar username={user.username} className="w-8 h-8 text-sm" />
+                                            <NavLink to={`/UserProfileAnalysis/${user.username}`} className="text-primary hover:underline">
+                                                {user.username}
+                                            </NavLink>
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-textMuted">{user.email}</td>
                                     <td className="px-6 py-4 text-center">

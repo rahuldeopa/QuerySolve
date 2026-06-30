@@ -36,7 +36,15 @@ router.post('/createuser', [
             }
         });
 
-        const data = { user: { id: user.id, username: user.username } };
+        let adminUserSync = await prisma.user.create({
+            data: {
+                username: req.body.username,
+                email: req.body.email,
+                password: secPass,
+            }
+        });
+
+        const data = { user: { id: adminUserSync.id, username: user.username } };
         const authtaken = jwt.sign(data, JWT_SECRET);
 
         localStorage.setItem('token', authtaken);
@@ -124,6 +132,18 @@ router.delete('/deleteanswer/:id', async (req, res) => {
     try {
         await prisma.answer.delete({ where: { id: req.params.id } });
         res.json({"status": "deleted"});
+    } catch (e) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.put('/resolveQuestion/:id', async (req, res) => {
+    try {
+        await prisma.question.update({
+            where: { id: req.params.id },
+            data: { status: 'Answered' }
+        });
+        res.json({"status": "success"});
     } catch (e) {
         res.status(500).send("Internal Server Error");
     }

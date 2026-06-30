@@ -25,7 +25,13 @@ router.post('/addquestion', fetchuser, async (req, res) => {
 router.post('/fetchquestions', async (req, res) => {
     try {
         const questions = await prisma.question.findMany({
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
+            include: {
+                answers: {
+                    orderBy: { votes: 'desc' },
+                    take: 1
+                }
+            }
         });
         res.json(questions);
     } catch (e) {
@@ -37,7 +43,13 @@ router.post('/fetchquestions', async (req, res) => {
 router.post('/fetchQueByHigherVotes', async (req, res) => {
     try {
         const questions = await prisma.question.findMany({
-            orderBy: { votes: 'desc' }
+            orderBy: { votes: 'desc' },
+            include: {
+                answers: {
+                    orderBy: { votes: 'desc' },
+                    take: 1
+                }
+            }
         });
         res.json(questions);
     } catch (e) {
@@ -77,6 +89,26 @@ router.post('/deleteque/:id', async(req, res)=>{
     try {
         await prisma.question.delete({ where: { id: req.params.id } });
         res.json({ status: "deleted" });
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.put('/resolve/:id', fetchuser, async (req, res) => {
+    try {
+        let question = await prisma.question.findUnique({ where: { id: req.params.id } });
+        if (!question) {
+            return res.status(404).send("Question not found");
+        }
+        if (question.userId !== req.user.id) {
+            return res.status(401).send("Not Authorized");
+        }
+        await prisma.question.update({
+            where: { id: req.params.id },
+            data: { status: 'Answered' }
+        });
+        res.json({ status: "success" });
     } catch (e) {
         console.error(e.message);
         res.status(500).send("Internal Server Error");
@@ -193,7 +225,12 @@ router.post("/upvote/:id", fetchuser, async (req, res) => {
 
         if (existingVote) {
             if (existingVote.type === 'SIGNAL') {
-                return res.status(400).json({ error: "Already signaled" });
+                await prisma.vote.delete({ where: { id: existingVote.id } });
+                await prisma.question.update({
+                    where: { id: questionId },
+                    data: { votes: { decrement: 1 } }
+                });
+                return res.json({ status: "removed_signal" });
             } else {
                 await prisma.vote.update({
                     where: { id: existingVote.id },
@@ -232,7 +269,12 @@ router.post("/downvote/:id", fetchuser, async (req, res) => {
 
         if (existingVote) {
             if (existingVote.type === 'NOISE') {
-                return res.status(400).json({ error: "Already noised" });
+                await prisma.vote.delete({ where: { id: existingVote.id } });
+                await prisma.question.update({
+                    where: { id: questionId },
+                    data: { votes: { increment: 1 } }
+                });
+                return res.json({ status: "removed_noise" });
             } else {
                 await prisma.vote.update({
                     where: { id: existingVote.id },
@@ -276,6 +318,15 @@ router.post("/fetchallVotes", async (req, res) => {
         const obj = {};
         questions.forEach(que => { obj[que.id] = que.votes; });
         res.json(obj);
+    } catch (e) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.post("/myVotes", fetchuser, async (req, res) => {
+    try {
+        const votes = await prisma.vote.findMany({ where: { userId: req.user.id } });
+        res.json(votes);
     } catch (e) {
         res.status(500).send("Internal Server Error");
     }

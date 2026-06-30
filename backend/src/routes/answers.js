@@ -227,6 +227,23 @@ router.post("/findNumberOfAns", async (req, res) => {
     }
 });
 
+router.post("/findResolvedQuestions", async (req, res) => {
+    try {
+        const answers = await prisma.answer.findMany({ 
+            where: { status: "Accepted" },
+            select: { questionId: true } 
+        });
+        let obj = {};
+        answers.forEach(answer => {
+            obj[answer.questionId] = true;
+        });
+        res.json(obj);
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 router.post("/upvote/:id", fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;
@@ -238,7 +255,12 @@ router.post("/upvote/:id", fetchuser, async (req, res) => {
 
         if (existingVote) {
             if (existingVote.type === 'SIGNAL') {
-                return res.status(400).json({ error: "Already signaled" });
+                await prisma.vote.delete({ where: { id: existingVote.id } });
+                await prisma.answer.update({
+                    where: { id: answerId },
+                    data: { votes: { decrement: 1 } }
+                });
+                return res.json({ status: "removed_signal" });
             } else {
                 await prisma.vote.update({
                     where: { id: existingVote.id },
@@ -288,7 +310,12 @@ router.post("/downvote/:id", fetchuser, async (req, res) => {
 
         if (existingVote) {
             if (existingVote.type === 'NOISE') {
-                return res.status(400).json({ error: "Already noised" });
+                await prisma.vote.delete({ where: { id: existingVote.id } });
+                await prisma.answer.update({
+                    where: { id: answerId },
+                    data: { votes: { increment: 1 } }
+                });
+                return res.json({ status: "removed_noise" });
             } else {
                 await prisma.vote.update({
                     where: { id: existingVote.id },

@@ -23,7 +23,7 @@ export default function SaaSLayout({ children }) {
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         <TopNav onSearchClick={() => setIsSearchOpen(true)} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 no-scrollbar scroll-smooth">
-          <div className="max-w-[1600px] mx-auto w-full h-full">
+          <div className="w-full max-w-[1920px] mx-auto w-full h-full">
             {children}
           </div>
         </main>
