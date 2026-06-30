@@ -38,6 +38,7 @@ export default function AdminSidebar() {
                                     ? 'bg-rose-500/15 text-rose-500 border-l-2 border-rose-500 pl-3.5'
                                     : 'text-textMuted hover:text-textMain hover:bg-surfaceHover hover:translate-x-1'
                             }`
+                        }
                     >
                         <Icon style={{ fontSize: '18px' }} className="transition-transform duration-200 group-hover:scale-110" />
                         {label}
