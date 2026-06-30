@@ -89,140 +89,34 @@ export default function Search() {
     const paginate = pageNum => setcurrentPage(pageNum);
 
     return (
-        <>
-            <div Style="height:100%; margin-top:13vh; z-index:1; background-color:white">
-                <div class="">
-
-
-                    <div className="stack-index">
-                        <div className="stack-index-content" >
-                            <Sidebar />
-
-
-                            <div className="main">
-                                <div className="main-container">
-                                    <div className="main-top">
-                                        <h2>All Questions</h2>
-                                        <NavLink to="/editor"><button>Ask Question</button></NavLink>
-                                    </div>
-
-                                    <div className='main-desc'>
-                                        <p>{questions.length} Questions</p>
-                                        <div className="main-filter">
-                                            <div className="main-tabs">
-                                                <div className="main-tab">
-                                                    <NavLink className="tab" onClick={answeredQuestions}>Answered</NavLink>
-                                                </div>
-                                                <div className="main-tab">
-                                                    <NavLink onClick={sortByVotes}>Votes</NavLink>
-                                                </div>
-                                                <div className="main-tab">
-                                                    <NavLink onClick={unansweredQuestions}>Unanswered</NavLink>
-                                                </div>
-                                            </div>
-
-                                            {/* filter functionality */}
-                                            {/* <div className="main-filter-item" onClick={(e) => {
-                                                e.persist();
-                                                setShowFilter(!showFilter);
-
-                                            }
-                                            }> */}
-                                            {/* <FilterList style={{ fontSize: '21px' }} />
-                                                <p className="filter-text">Filter</p>
-                                            </div>
-
-                                            {
-                                                showFilter && (
-                                                    <div className="filter_main">
-                                                        <div className="card3">
-                                                            <p>tag</p>
-                                                            <p>answered</p>
-                                                            <p>unanswered</p>
-                                                            <p>4</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            } */}
-                                        </div>
-                                    </div>
-                                    {/* This displays all questions */}
-                                    <div className="questions">
-                                        <div className="question">
-                                            <Posts posts={currentPosts} />
-                                        </div>
-
-                                    </div>
-                                    <div className="container">
-
-                                        <Pagination postsPerPage={postPerPage} totalPosts={questions.length} paginate={paginate} />
-                                    </div>
-
-                                </div>
-                            </div>
-
+        <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
+            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row w-full">
+                <Sidebar />
+                <main className="flex-1 py-8 px-4 md:px-8 w-full border-none lg:border-r border-surfaceBorder overflow-hidden">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                        <div className="flex flex-col gap-1">
+                            <h1 className="text-3xl font-extrabold text-textMain tracking-tight">Search Results</h1>
+                            <p className="text-textMuted font-medium text-sm">{questions.length} Questions Found</p>
                         </div>
+                        <NavLink to="/editor" className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-bold shadow-lg shadow-primary/30 transition-all hover:scale-105">
+                            Ask Question
+                        </NavLink>
                     </div>
-                    {/* 
-                    <div class="d-flex flex-column flex-shrink-0 p-3 col-md-7" Style="background-color:white;">
-                        <div className="d-flex d-flex-row align-items-center">
-                            <h1 className='mx-4'>see here All Questions</h1>
 
-                            <button className="btn btn-primary mx-4" Style="position:absolute; right:0px;" onClick={askQue}>See Here Ask Question</button>
-                        </div>
+                    <div className="flex bg-surface p-1 rounded-xl shadow-sm gap-1 relative z-0 w-full overflow-x-auto no-scrollbar mb-6">
+                        <button onClick={answeredQuestions} className="px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 text-textMuted hover:text-textMain hover:bg-surfaceHover/50">Answered</button>
+                        <button onClick={sortByVotes} className="px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 text-textMuted hover:text-textMain hover:bg-surfaceHover/50">Votes</button>
+                        <button onClick={unansweredQuestions} className="px-4 py-1.5 text-sm font-semibold rounded-lg transition-all duration-300 text-textMuted hover:text-textMain hover:bg-surfaceHover/50">Unanswered</button>
+                    </div>
 
-
-                        {questions.length > 0 && (
-                            <ul>
-
-                                {questions.map(question => (
-
-                                    <div class="card mt-1">
-
-                                        <div class="card-body">
-                                            <div className="d-flex flex-row">
-
-                                                <div class="d-flex flex-column flex-shrink-0 col-md-2 mt-4 mx-0">
-
-                                                    <div>0 votes</div>
-                                                    {(
-                                                        () => {
-                                                            if (question.id in noOfAns) {
-                                                                return (<div>{noOfAns[question.id]} Answers</div>);
-                                                            }
-                                                            else {
-                                                                return (<>0 Answers</>);
-                                                            }
-                                                        }
-                                                    )()}
-
-
-
-                                                </div>
-
-                                                <div class="d-flex flex-column flex-shrink-0 col-md-10">
-                                                    <NavLink to={{ pathname: `/question/${question.id}` }} className="card-title" Style="text-decoration:none;color:#0074CC"><h4>{question.title}</h4></NavLink>
-                                                    <small Style="font-size:1px;">{parse(question.question)[0]}</small>
-                                                 
-                                                    <div className='mt-3'>{question.tags.split(" ").map(tag => <small className='mx-2 px-2 py-1' Style="color:hsl(205,47%,42%); background-color: hsl(205,46%,92%); border-radius:5px;">{tag}</small>)}</div>
-                                                    <small className='d-flex flex-row-reverse'> asked {question.createdAt.slice(0, 10)} at {question.createdAt.slice(12, 16)} <p Style="color:#0074CC">{question.postedBy}&nbsp;</p></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                ))}
-                            </ul>
-                        )}
-
-
-
-                    </div> */}
-                </div>
-
-
+                    <div className="mb-8">
+                        <Posts posts={currentPosts} />
+                    </div>
+                    <div className="flex justify-center pb-8">
+                        <Pagination postsPerPage={postPerPage} totalPosts={questions.length} paginate={paginate} />
+                    </div>
+                </main>
             </div>
-        </>
-
+        </div>
     )
 }

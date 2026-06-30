@@ -155,85 +155,71 @@ export default function Adminquestion() {
 
    
     return (
-        <>
-        <div className="container" Style="height:100vh;margin-top:13vh; z-index:1; background-color:white">
-            <ProfileSidebar/>
-              <div className='header_and_content'>
-            
-           
-            <br></br>
+        <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
+            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+                <AdminSidebar />
+                <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
+                    <h1 className="text-3xl font-extrabold tracking-tight">Manage Questions</h1>
+                    
+                    {/* Filters & Search */}
+                    <div className="glass border border-surfaceBorder rounded-xl p-6 flex flex-col gap-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <span className="font-bold text-sm text-textMuted uppercase">Filter:</span>
+                            <input type="date" name="startDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary/50" />
+                            <span className="text-textMuted text-sm font-bold">TO</span>
+                            <input type="date" name="endDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary/50" />
+                            
+                            <select name="tags" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary/50 ml-auto">
+                                <option value="none" defaultValue hidden>Select Tag</option>
+                                {usedTags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+                            </select>
+                        </div>
+                        
+                        <input 
+                            type="text" 
+                            className="w-full bg-surfaceHover border border-surfaceBorder rounded-lg px-4 py-2 text-sm text-textMain focus:outline-none focus:border-primary/50" 
+                            placeholder="Search question titles..." 
+                            onChange={searchHandler} 
+                        />
+                    </div>
 
-        {/* <div style={{ marginTop: '10px', marginLeft: '50px' }}> */}
-            <div className='filters_menu'>
-                    <strong Style="display:inline">Find All questions between : </strong>
-                    <input type="date" name="startDate" onChange={onChange} /> 
-                    <strong Style="display:inline">To</strong>
-                    <input type="date" name="endDate" onChange={onChange} />
-                    <strong Style="display:inline">and in tag:</strong>
-                    <select name="tags" onChange={onChange} >
-                        <option value="none" selected disabled hidden>select a tag</option>
-                        {usedTags.map(tag => <option value={tag}>{tag}</option>)}
-                    </select>
-                </div>
-                {/* </div> */}
-            <div class="input-group">
-      <div class="form-outline">
-        <input type="text" Style="display:inline" className='form-control' placeholder="Search From Que. Title" name="search" onChange={searchHandler} />
-        </div>
-        <button id="search-button" type="button" class="btn btn-primary">
-    <i class="fa fa-search"></i>
-  </button>
-  </div>
-           <ul>
+                    {/* Questions List */}
+                    <div className="flex flex-col gap-4">
+                        {filteredQue.map(question => (
+                            <div key={question.id} className="glass border border-surfaceBorder rounded-xl p-5 flex flex-col sm:flex-row gap-4 justify-between items-start hover:shadow-lg transition-shadow">
+                                <div className="flex-1 flex flex-col gap-2">
+                                    <NavLink to={`/question/${question.id}`} className="text-lg font-bold text-textMain hover:text-primary transition-colors">
+                                        {question.title}
+                                    </NavLink>
+                                    
+                                    <div className="flex flex-wrap gap-2 mt-1">
+                                        {question.tags.split(" ").filter(t => t.trim()).map(tag => (
+                                            <span key={tag} className="px-2 py-0.5 rounded border border-surfaceBorder text-xs text-textMuted bg-surfaceHover">
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="text-xs text-textMuted mt-2">
+                                        Asked {question.createdAt.slice(0, 10)} by <span className="text-primary font-semibold">{question.postedBy}</span>
+                                    </div>
+                                </div>
 
-{filteredQue.map(question => (
-
-    <div class="card mt-1">
-
-        <div class="card-body">
-            <div className="d-flex flex-row">
-
-                <div class="d-flex flex-column flex-shrink-0 col-md-2 mt-4 mx-0">
-
-                    <div>0 votes</div>
-                    {(
-                        () => {
-                            if (question.id in noOfAns) {
-                                return (<div>{noOfAns[question.id]} Answers</div>);
-                            }
-                            else {
-                                return (<>0 Answers</>);
-                            }
-                        }
-                    )()}
-
-
-
-                </div>
-
-                <div class="d-flex flex-column flex-shrink-0 col-md-10">
-                    <NavLink to={{ pathname: `/question/${question.id}` }} className="card-title" Style="text-decoration:none;color:#0074CC"><h4>{question.title}</h4></NavLink>
-                    <small Style="font-size:1px;">{parse(question.question)[0]}</small>
-                 
-                    <div className='mt-3'>{question.tags.split(" ").map(tag => <small className='mx-2 px-2 py-1' Style="color:hsl(205,47%,42%); background-color: hsl(205,46%,92%); border-radius:5px;">{tag}</small>)}</div>
-                    <small className='d-flex flex-row-reverse'> asked {question.createdAt.slice(0, 10)} at {question.createdAt.slice(12, 16)} <p Style="color:#0074CC">{question.postedBy}&nbsp;</p></small>
+                                <div className="flex flex-col sm:items-end gap-3 min-w-[120px]">
+                                    <div className="text-xs font-bold text-textMuted bg-surfaceHover px-3 py-1 rounded-lg border border-surfaceBorder text-center">
+                                        {noOfAns[question.id] || 0} Answers
+                                    </div>
+                                    <button onClick={() => deleteQuestion(question.id)} className="w-full px-3 py-1.5 text-xs font-bold text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors flex items-center justify-center gap-1">
+                                        <DeleteIcon style={{ fontSize: '14px' }} /> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-            <Button  variant="outlined" startIcon={<DeleteIcon />} onClick={() => deleteQuestion(question.id)}>delete</Button>
         </div>
-       
-        
-    </div>
-
-))}
-</ul>
-{/* <div className="container">
-                    <Pagination postsPerPage={postPerPage} totalPosts={questions.length} paginate={paginate} />
-                </div> */}
-       </div>
-       </div>
-        </>
-        )
+    );
 
 
 }

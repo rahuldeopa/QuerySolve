@@ -19,11 +19,14 @@
     --color-bg: #09090b;
     --color-surface: #18181b;
     --color-surface-hover: #27272a;
-    --color-surface-border: transparent;
+    --color-surface-border: rgba(255, 255, 255, 0.05);
     --color-text-main: #f4f4f5;
     --color-text-muted: #a1a1aa;
     --color-surface-glass: rgba(24, 24, 27, 0.65);
-    
+  }
+
+  .dark .border-surfaceBorder {
+    border-color: transparent !important;
   }
 
   body {
@@ -159,6 +162,8 @@ a:hover {
 .dark .jodit-ui-group,
 .dark .jodit-toolbar-editor-collection {
   border-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .dark .jodit-toolbar__box {

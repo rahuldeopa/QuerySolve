@@ -73,41 +73,49 @@ export default function Adminanswer() {
     const paginate = pageNum => setcurrentPage(pageNum);
 
     return (
-        <div className="container" Style="height:100vh;margin-top:13vh; z-index:1; background-color:white">
-            <ProfileSidebar />
-            <div className='header_and_content'>
-            
-                {/* filter based on date , tags and status  */}
-                <div className='filters_menu'>
-                    <strong Style="display:inline">Find answers between : </strong>
-                    <input type="date" name="startDate" onChange={onChange} />
-                    <strong Style="display:inline">To</strong>
-                    <input type="date" name="endDate" onChange={onChange} />
-                    <strong Style="display:inline">and in tag:</strong>
-                    <select name="tags" onChange={onChange} >
-                        <option value="none" selected disabled hidden>select a tag</option>
-                        {usedTags.map(tag => <option value={tag}>{tag}</option>)}
-                    </select>
+        <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
+            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+                <ProfileSidebar />
+                <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
+                    <h1 className="text-3xl font-extrabold tracking-tight">Manage Answers</h1>
 
-                   <input type="radio"  name="status" value="Accepted" onChange={onChange}/>
-                    <label for="accepted" style={{fontSize: '14px'}}>Accepted</label>
-                    <input type="radio" name="status" value="Not Accepted" onChange={onChange}/>
-                    <label for="notAccepted" style={{fontSize: '14px'}}>Not Accepted</label>
-                </div>
+                    {/* filter based on date , tags and status  */}
+                    <div className="glass border border-surfaceBorder rounded-xl p-6 flex flex-col sm:flex-row gap-4 items-center">
+                        <div className="flex items-center gap-3">
+                            <span className="font-bold text-sm text-textMuted uppercase">Filter:</span>
+                            <input type="date" name="startDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50" />
+                            <span className="text-textMuted font-bold text-sm">TO</span>
+                            <input type="date" name="endDate" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50" />
+                        </div>
+                        
+                        <div className="flex items-center gap-4 sm:ml-auto">
+                            <select name="tags" onChange={onChange} className="bg-surfaceHover border border-surfaceBorder rounded-lg px-3 py-1.5 text-sm focus:border-primary/50">
+                                <option value="none" defaultValue hidden>Select Tag</option>
+                                {usedTags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+                            </select>
 
+                            <div className="flex items-center gap-3 bg-surfaceHover px-4 py-1.5 rounded-lg border border-surfaceBorder">
+                                <label className="flex items-center gap-1.5 text-sm font-semibold cursor-pointer text-emerald-500">
+                                    <input type="radio" name="status" value="Accepted" onChange={onChange} className="accent-emerald-500" />
+                                    Accepted
+                                </label>
+                                <label className="flex items-center gap-1.5 text-sm font-semibold cursor-pointer text-textMuted hover:text-textMain">
+                                    <input type="radio" name="status" value="Not Accepted" onChange={onChange} className="accent-primary" />
+                                    Pending
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                <div className="questions">
-                    <div className="question">
+                    <div className="flex flex-col gap-4">
                         <PostsAns posts={currentPosts} />
-
+                    </div>
+                    
+                    <div className="flex justify-center mt-4">
+                        <Pagination postsPerPage={postPerPage} totalPosts={answers.length} paginate={paginate} />
                     </div>
 
                 </div>
-                <div className="container">
-
-                    <Pagination postsPerPage={postPerPage} totalPosts={answers.length} paginate={paginate} />
-                </div>
-
             </div>
         </div>
     )

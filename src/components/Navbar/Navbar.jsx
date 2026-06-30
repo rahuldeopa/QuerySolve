@@ -108,9 +108,9 @@ export default function Navbar() {
             </button>
 
             {/* Auth/Profile */}
-            <div className="w-80 flex justify-end items-center border-l border-surfaceBorder">
+            <div className="flex justify-end items-center md:border-l md:border-surfaceBorder">
               {loginStatus ? (
-                <div className="flex items-center gap-3 pl-4">
+                <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4">
                   <NavLink to="/analysis" className="group flex items-center gap-2 hover:bg-surfaceHover px-2 py-1 rounded-xl transition-all duration-200">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm border border-primary/30 transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/30 group-hover:scale-105">
                       {userInitial}
@@ -125,11 +125,11 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-3 pl-4">
-                  <NavLink to="/login" className="px-4 py-2 text-sm font-medium text-textMain hover:text-primary transition-all duration-200 hover:-translate-y-0.5">
+                <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4">
+                  <NavLink to="/login" className="px-2 md:px-4 py-2 text-sm font-medium text-textMain hover:text-primary transition-all duration-200 hover:-translate-y-0.5">
                     Log In
                   </NavLink>
-                  <NavLink to="/register" className="px-5 py-2 text-sm font-medium bg-gradient-to-r from-primary to-accent text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/50 active:scale-95">
+                  <NavLink to="/register" className="px-3 md:px-5 py-2 text-xs md:text-sm font-medium bg-gradient-to-r from-primary to-accent text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/50 active:scale-95">
                     Sign Up
                   </NavLink>
                 </div>

@@ -167,7 +167,7 @@ useEffect(() => {
         const data = await response.json();
   
         data.forEach(item => {
-          const monthIndex = item.id - 1;
+          const monthIndex = item._id - 1;
           const count = item.count;
           switch (monthIndex) {
             case 0:
@@ -228,7 +228,7 @@ useEffect(() => {
             const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/admin/question-by-year');
             const data = await response.json();
             data.forEach(item => {
-                const yearIndex = item.id - 2021;
+                const yearIndex = item._id - 2021;
                 const count = item.count;
                 switch (yearIndex) {
                     case 0:
@@ -266,24 +266,28 @@ useEffect(() => {
     }, [])
     
     return (
-        <>
-        <div className="container" Style="background-color:#f8f9f9; height:100%; margin-top:20vh; z-index:1;">
-            <AdminSidebar />
-           
-                <div className='charts'>
-                    <div className="first_row">
-                        <Chart title="overall data" count={[user,NoOfQuestions,answer,accept]} Tags={["Users","Questions","Answers","Accepted Answers"]} />
-                        <Chart title="No of questions in particular tag" count={count} Tags={Tags} />
-                    </div>  
-                    {'\n'} 
-                    <div className="first_row">
-                        <Chart title="No of questions in particular month" count={[january,february,march,april,may,june,july,august,september,october,november,december]} Tags={["january","february","march","april","may","june","july","august","september","october","november","december"]} />
-                        <Chart title="No of questions in particular year" count={[twentyone,twentytwo,twentythree]} Tags={["2021","2022","2023"]} />
+        <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
+            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+                <AdminSidebar />
+                <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
+                    <h1 className="text-3xl font-extrabold tracking-tight">Platform Analysis</h1>
+                    
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <div className="glass border border-surfaceBorder rounded-2xl p-6 hover:shadow-lg transition-all min-w-[300px] overflow-hidden">
+                            <Chart title="Overall Platform Data" count={[user,NoOfQuestions,answer,accept]} Tags={["Users","Questions","Answers","Accepted"]} />
+                        </div>
+                        <div className="glass border border-surfaceBorder rounded-2xl p-6 hover:shadow-lg transition-all min-w-[300px] overflow-hidden">
+                            <Chart title="Questions Distribution by Tag" count={count} Tags={Tags} />
+                        </div>  
+                        <div className="glass border border-surfaceBorder rounded-2xl p-6 hover:shadow-lg transition-all min-w-[300px] overflow-hidden">
+                            <Chart title="Questions by Month" count={[january,february,march,april,may,june,july,august,september,october,november,december]} Tags={["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]} />
+                        </div>
+                        <div className="glass border border-surfaceBorder rounded-2xl p-6 hover:shadow-lg transition-all min-w-[300px] overflow-hidden">
+                            <Chart title="Questions by Year" count={[twentyone,twentytwo,twentythree]} Tags={["2021","2022","2023"]} />
+                        </div>
                     </div>
                  </div>
-           
+            </div>
         </div>
-        </>
-       
     )
 }

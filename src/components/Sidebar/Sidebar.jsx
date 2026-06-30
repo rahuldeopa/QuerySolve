@@ -7,7 +7,7 @@ const itemBase = "group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm f
 
 export default function Sidebar() {
     return (
-        <div className="w-64 flex-shrink-0 min-h-[calc(100vh-4rem)] border-r border-surfaceBorder bg-surface/30 flex flex-col overflow-y-auto custom-scrollbar">
+        <div className="hidden lg:flex w-64 flex-shrink-0 min-h-[calc(100vh-4rem)] border-r border-surfaceBorder bg-surface/30 flex-col overflow-y-auto custom-scrollbar">
             <div className="py-6 px-4 flex flex-col gap-6 sticky top-16">
 
                 {/* Feeds */}

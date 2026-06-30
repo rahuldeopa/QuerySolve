@@ -95,8 +95,8 @@ export default function Analysis() {
         if (filters.startDate && filters.endDate) {
             let cntVal = 0;
             acceptedansweredQues.forEach(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate) {
+                const tags = ques?.tags || "";
+                if (ques && ques.createdAt && ques.createdAt.substring(0, 10) >= filters.startDate && ques.createdAt.substring(0, 10) <= filters.endDate) {
                     cntVal++;
                     tags.split(" ").forEach(tag =>
                         ac_ans_freqOfTags[tag] = 0
@@ -105,10 +105,10 @@ export default function Analysis() {
             })
 
             acceptedansweredQues.forEach(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate)
+                const tags = ques?.tags || "";
+                if (ques && ques.createdAt && ques.createdAt.substring(0, 10) >= filters.startDate && ques.createdAt.substring(0, 10) <= filters.endDate)
                     tags.split(" ").forEach(tag =>
-                        ac_ans_freqOfTags[tag] = ac_ans_freqOfTags[tag] + 1
+                        ac_ans_freqOfTags[tag] = (ac_ans_freqOfTags[tag] || 0) + 1
                     )
             })
 
@@ -116,16 +116,16 @@ export default function Analysis() {
         }
         else {
             acceptedansweredQues.forEach(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").forEach(tag =>
                     ac_ans_freqOfTags[tag] = 0
                 )
             })
 
             acceptedansweredQues.forEach(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").forEach(tag =>
-                    ac_ans_freqOfTags[tag] = ac_ans_freqOfTags[tag] + 1
+                    ac_ans_freqOfTags[tag] = (ac_ans_freqOfTags[tag] || 0) + 1
                 )
             })
 
@@ -164,8 +164,8 @@ export default function Analysis() {
         if (filters.startDate && filters.endDate) {
             let cntVal = 0;
             answeredQues.forEach(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate) {
+                const tags = ques?.tags || "";
+                if (ques && ques.createdAt && ques.createdAt.substring(0, 10) >= filters.startDate && ques.createdAt.substring(0, 10) <= filters.endDate) {
                     cntVal++;
                     tags.split(" ").forEach(tag =>
                         ans_freqOfTags[tag] = 0
@@ -174,10 +174,10 @@ export default function Analysis() {
             })
 
             answeredQues.forEach(ques => {
-                const tags = ques[0].tags;
-                if (ques[0].createdAt.substring(0, 10) >= filters.startDate && ques[0].createdAt.substring(0, 10) <= filters.endDate)
+                const tags = ques?.tags || "";
+                if (ques && ques.createdAt && ques.createdAt.substring(0, 10) >= filters.startDate && ques.createdAt.substring(0, 10) <= filters.endDate)
                     tags.split(" ").forEach(tag =>
-                        ans_freqOfTags[tag] = ans_freqOfTags[tag] + 1
+                        ans_freqOfTags[tag] = (ans_freqOfTags[tag] || 0) + 1
                     )
             })
 
@@ -185,16 +185,16 @@ export default function Analysis() {
         }
         else {
             answeredQues.forEach(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").forEach(tag =>
                     ans_freqOfTags[tag] = 0
                 )
             })
 
             answeredQues.forEach(ques => {
-                const tags = ques[0].tags;
+                const tags = ques?.tags || "";
                 tags.split(" ").forEach(tag =>
-                    ans_freqOfTags[tag] = ans_freqOfTags[tag] + 1
+                    ans_freqOfTags[tag] = (ans_freqOfTags[tag] || 0) + 1
                 )
             })
 

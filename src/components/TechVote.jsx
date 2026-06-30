@@ -4,14 +4,9 @@ import SensorsIcon from '@mui/icons-material/Sensors'; // Using as Signal icon
 import BlurOffIcon from '@mui/icons-material/BlurOff'; // Using as Noise icon
 
 export default function TechVote({ initialScore, onUpvote, onDownvote }) {
-    const [score, setScore] = useState(initialScore);
     const [voteStatus, setVoteStatus] = useState('none'); // 'signal', 'noise', 'none'
     const [animateSignal, setAnimateSignal] = useState(false);
     const [animateNoise, setAnimateNoise] = useState(false);
-
-    React.useEffect(() => {
-        setScore(initialScore);
-    }, [initialScore]);
 
     const handleSignal = async (e) => {
         e.preventDefault();
@@ -21,14 +16,11 @@ export default function TechVote({ initialScore, onUpvote, onDownvote }) {
         setAnimateSignal(true);
         setTimeout(() => setAnimateSignal(false), 800);
         
-        // Optimistic UI Update
-        if (voteStatus === 'signal') return; // Already signaled
-        const diff = voteStatus === 'noise' ? 2 : 1;
-        setScore(prev => prev + diff);
-        setVoteStatus('signal');
-
         // Trigger API Callback
         if (onUpvote) onUpvote(e);
+        
+        // Optimistic color update
+        setVoteStatus('signal');
     };
 
     const handleNoise = async (e) => {
@@ -39,14 +31,11 @@ export default function TechVote({ initialScore, onUpvote, onDownvote }) {
         setAnimateNoise(true);
         setTimeout(() => setAnimateNoise(false), 500);
 
-        // Optimistic UI Update
-        if (voteStatus === 'noise') return; // Already noised
-        const diff = voteStatus === 'signal' ? 2 : 1;
-        setScore(prev => prev - diff);
-        setVoteStatus('noise');
-
         // Trigger API Callback
         if (onDownvote) onDownvote(e);
+        
+        // Optimistic color update
+        setVoteStatus('noise');
     };
 
     return (
@@ -88,7 +77,7 @@ export default function TechVote({ initialScore, onUpvote, onDownvote }) {
                 ${voteStatus === 'noise' ? 'text-rose-500 drop-shadow-[0_0_5px_rgba(244,63,94,0.5)]' : ''}
                 ${voteStatus === 'none' ? 'text-textMain' : ''}
             `}>
-                {score}
+                {initialScore}
             </span>
 
             {/* The Noise Button */}

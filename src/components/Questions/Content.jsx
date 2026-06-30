@@ -219,11 +219,11 @@ export default function Content(props) {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex justify-center w-full">
+            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row w-full">
 
                 <Sidebar />
 
-                <main className="flex-1 py-8 px-4 md:px-8 w-full border-r border-surfaceBorder">
+                <main className="flex-1 py-8 px-4 md:px-8 w-full lg:border-r border-surfaceBorder overflow-hidden">
 
                     {/* Alert Banners */}
                     <div className="flex flex-col gap-4">
@@ -379,7 +379,7 @@ export default function Content(props) {
                 </main>
 
                 {/* Right Column: AI Assistant Insights Panel */}
-                <aside className="w-80 flex-shrink-0 py-8 px-6 block">
+                <aside className="hidden xl:block w-80 flex-shrink-0 py-8 px-6">
                     <div className="sticky top-24 flex flex-col gap-6">
                         {aiAnalysis && (
                             <motion.div

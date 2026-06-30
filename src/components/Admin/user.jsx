@@ -9,9 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
 
-var mydiv = {
-  margin: '8% 8%',
-};
 export default function AdminUser() {
   const [users, setUsers] = useState([])
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -62,57 +59,52 @@ export default function AdminUser() {
   }
 
   return (
-    <div className='container' Style="background-color:#f8f9f9; height:100%; margin-top:20vh; z-index:1;">
-      <AdminSidebar />
-      <div Style="display:block">
-      <div class="input-group">
-      <div class="form-outline">
-        <input type="text" className='form-control' placeholder="Search From UserName" name="search" onChange={handleSearch} />
+    <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
+        <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row gap-6 py-12 px-4 md:px-8">
+            <AdminSidebar />
+            <div className="flex-1 flex flex-col gap-6 w-full overflow-hidden">
+                <h1 className="text-3xl font-extrabold tracking-tight">Manage Users</h1>
+                
+                {/* Search */}
+                <div className="glass border border-surfaceBorder rounded-xl p-4 flex gap-4">
+                    <input 
+                        type="text" 
+                        className="flex-1 bg-surfaceHover border border-surfaceBorder rounded-lg px-4 py-2 text-sm text-textMain focus:outline-none focus:border-primary/50" 
+                        placeholder="Search Username..." 
+                        onChange={handleSearch} 
+                    />
+                </div>
+                {/* Table */}
+                <div className="glass rounded-xl border border-surfaceBorder overflow-hidden">
+                    <table className="w-full text-left border-collapse">
+                        <thead className="bg-surface border-b border-surfaceBorder">
+                            <tr>
+                                <th className="px-6 py-4 text-xs font-bold text-textMuted uppercase tracking-wider">User Name</th>
+                                <th className="px-6 py-4 text-xs font-bold text-textMuted uppercase tracking-wider">User Email</th>
+                                <th className="px-6 py-4 text-xs font-bold text-textMuted uppercase tracking-wider text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-surfaceBorder">
+                            {filteredUsers.map((user) => (
+                                <tr key={user.id} className="hover:bg-surfaceHover/50 transition-colors">
+                                    <td className="px-6 py-4 text-sm font-semibold text-textMain">
+                                        <NavLink to={`/UserProfileAnalysis/${user.username}`} className="text-primary hover:underline">
+                                            {user.username}
+                                        </NavLink>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-textMuted">{user.email}</td>
+                                    <td className="px-6 py-4 text-center">
+                                        <button onClick={() => deleteUser(user.id)} className="px-3 py-1.5 text-xs font-bold text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors flex items-center gap-1 mx-auto">
+                                            <DeleteIcon style={{ fontSize: '14px' }} /> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <button id="search-button" type="button" class="btn btn-primary">
-    <i class="fa fa-search"></i>
-  </button>
-  </div>
-  
-
-        
-        {/* {fetchUsers} */}
-        {/* <button onClick={fetchUsers}>Fetch Users</button> */}
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th  style={{ width: '250px',textAlign:'center', height: '40px' }}scope="col" >User Name </th>
-              <th style={{ width: '250px',textAlign:'center', height: '40px' }} scope="col">User Email</th>
-              <th style={{ width: '250px',textAlign:'center', height: '40px' }} scope="col">Delete</th>
-            </tr>
-          </thead>
-        </table>
-
-        <div>
-          {filteredUsers.map((user) => {
-            return (
-              <div>
-                <table className="table table-bordered">
-                  <tbody>
-                    <tr>
-                      {/* <th scope="row">{user.id}</th> */}
-                      <td style={{ width: '250px',textAlign:'center', height: '40px' }} >
-                        <button className='btn btn-outline-primary' style={{ width: '150px', height: '40px' }}><NavLink to={{ pathname: `/UserProfileAnalysis/${user.username}`}}>{user.username}</NavLink></button>
-                      </td>
-                      <td  style={{ width: '250px',textAlign:'center', height: '40px' }}>{user.email}</td>
-                      <td style={{ width: '250px',textAlign:'center', height: '40px' }}>
-                        <Button  variant="outlined" startIcon={<DeleteIcon />}  aria-hidden="true" onClick={() => deleteUser(user.id)}>     delete
-</Button>
-                      </td>
-                     
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )
-          })}
-        </div>
-      </div>
     </div>
 
   )

@@ -56,7 +56,7 @@ export default function Editor(props) {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto flex justify-center w-full">
+            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row w-full">
                 <Sidebar />
                 <main className="flex-1 py-8 px-4 md:px-8 w-full">
 
@@ -118,7 +118,7 @@ export default function Editor(props) {
                                     name="title"
                                     onChange={onChange}
                                     placeholder="e.g. How to prevent memory leak in React useEffect dependencies?"
-                                    className="w-full bg-surfaceHover border border-surfaceBorder rounded-xl px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-sm"
+                                    className="w-full bg-surfaceHover border border-surfaceBorder dark:border-none rounded-xl px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-sm"
                                     required
                                 />
                                 <span className="text-xs text-textMuted">Be specific and explain what is failing.</span>
@@ -150,7 +150,7 @@ export default function Editor(props) {
                                     name="tags"
                                     onChange={onChange}
                                     placeholder="e.g. react javascript memory-leak"
-                                    className="w-full bg-surfaceHover border border-surfaceBorder rounded-xl px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-sm"
+                                    className="w-full bg-surfaceHover border border-surfaceBorder dark:border-none rounded-xl px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-sm"
                                     required
                                 />
                                 <span className="text-xs text-textMuted">Separate multiple tags with a single space.</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../Sidebar/Sidebar';
 import { FilterList } from '@mui/icons-material';
@@ -17,6 +17,7 @@ export default function Questions() {
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [activeSort, setActiveSort] = useState('latest');
     const navigate = useNavigate();
+    const location = useLocation();
 
     const fetchAllQuestions = async () => {
         await fetch(import.meta.env.VITE_BACKEND_URL + "/api/question/fetchquestions", {
@@ -59,8 +60,17 @@ export default function Questions() {
     }
 
     useEffect(() => {
-        fetchAllQuestions();
-    }, [])
+        const queryParams = new URLSearchParams(location.search);
+        const filter = queryParams.get('filter');
+
+        if (filter === 'unanswered') {
+            setActiveSort('open');
+            unansweredQuestions();
+        } else {
+            setActiveSort('latest');
+            fetchAllQuestions();
+        }
+    }, [location.search]);
 
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
@@ -70,12 +80,12 @@ export default function Questions() {
 
     return (
         <div className="min-h-screen bg-background text-textMain transition-colors duration-300">
-            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex w-full">
+            <div className="max-w-[1600px] mx-auto px-0 sm:px-6 lg:px-8 flex flex-col lg:flex-row w-full">
                 {/* Left Sidebar */}
                 <Sidebar />
 
                 {/* Middle Feed */}
-                <main className="flex-1 py-8 px-4 md:px-8 w-full border-r border-surfaceBorder">
+                <main className="flex-1 py-8 px-4 md:px-8 w-full lg:border-r border-surfaceBorder overflow-hidden">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                         <div className="flex flex-col gap-1">
                             <h1 className="text-3xl font-extrabold text-textMain tracking-tight">Public Feed</h1>
@@ -104,7 +114,7 @@ export default function Questions() {
                             <FilterList style={{ fontSize: '16px' }} /> Sort feed
                         </p>
 
-                        <div className="flex bg-surface p-1 rounded-xl  shadow-sm gap-1 relative z-0">
+                        <div className="flex bg-surface p-1 rounded-xl shadow-sm gap-1 relative z-0 w-full overflow-x-auto no-scrollbar">
                             {[
                                 { key: 'latest', label: 'Latest', fn: fetchAllQuestions },
                                 { key: 'resolved', label: 'Resolved', fn: answeredQuestions },
@@ -140,7 +150,7 @@ export default function Questions() {
                 </main>
 
                 {/* Right Sidebar */}
-                <aside className="w-80 flex-shrink-0 py-8 px-6 block">
+                <aside className="hidden xl:block w-80 flex-shrink-0 py-8 px-6">
                     <div className="sticky top-24 flex flex-col gap-6">
 
                         {/* Community Card */}
